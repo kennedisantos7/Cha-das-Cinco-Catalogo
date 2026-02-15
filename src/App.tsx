@@ -149,7 +149,7 @@ const AppContent = () => {
         );
     }
 
-    const isAuthScreen = activeScreen === 'login' || activeScreen === 'register';
+    const isAuthScreen = !isLoggedIn || activeScreen === 'login' || activeScreen === 'register';
     const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
     return (
