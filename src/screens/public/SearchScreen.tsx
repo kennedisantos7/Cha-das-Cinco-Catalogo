@@ -7,13 +7,15 @@ export const SearchScreen = ({
     onItemClick,
     favorites = [],
     onFavoriteToggle,
-    products
+    products,
+    onAddToCart
 }: {
     onBack: () => void,
     onItemClick: (p: Product) => void,
     favorites?: string[],
     onFavoriteToggle?: (id: string) => void,
-    products: Product[]
+    products: Product[],
+    onAddToCart: (p: Product, q: number) => void
 }) => {
     const [showFilter, setShowFilter] = useState(false);
 
@@ -61,7 +63,12 @@ export const SearchScreen = ({
                                         <p className="text-xs text-accent-sage font-medium mb-3">{p.category}</p>
                                         <div className="flex justify-between items-center mt-auto">
                                             <span className="font-bold text-primary text-lg">R$ {p.price.toFixed(2)}</span>
-                                            <button className="w-8 h-8 bg-gray-100 hover:bg-primary hover:text-white rounded-lg flex items-center justify-center transition-colors text-dark-green"><Plus size={18} /></button>
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); onAddToCart(p, 1); }}
+                                                className="w-8 h-8 bg-gray-100 hover:bg-primary hover:text-white rounded-lg flex items-center justify-center transition-colors text-dark-green"
+                                            >
+                                                <Plus size={18} />
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

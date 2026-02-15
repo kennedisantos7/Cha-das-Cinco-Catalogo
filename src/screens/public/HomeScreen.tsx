@@ -2,7 +2,7 @@ import React from 'react';
 import { Heart, Plus } from 'lucide-react';
 import { Product } from '../../types/types';
 
-export const HomeScreen = ({ products, onItemClick, onSeeAll, onFavoriteToggle, favorites }: { products: Product[], onItemClick: (p: Product) => void, onSeeAll: () => void, onFavoriteToggle: (id: string) => void, favorites: string[] }) => (
+export const HomeScreen = ({ products, onItemClick, onSeeAll, onFavoriteToggle, favorites, onAddToCart }: { products: Product[], onItemClick: (p: Product) => void, onSeeAll: () => void, onFavoriteToggle: (id: string) => void, favorites: string[], onAddToCart: (p: Product, q: number) => void }) => (
     <div className="flex-1 w-full max-w-7xl mx-auto md:px-6 py-6 pb-32">
         <div className="relative w-full md:h-[400px] h-[300px] bg-accent-pink rounded-3xl overflow-hidden mb-8 group cursor-pointer shadow-lg" onClick={() => onItemClick(products[0])}>
             <div className="absolute inset-0 flex items-center p-8 md:p-12 z-10 bg-gradient-to-r from-accent-pink/90 to-transparent">
@@ -55,7 +55,7 @@ export const HomeScreen = ({ products, onItemClick, onSeeAll, onFavoriteToggle, 
                             <div className="flex items-center justify-between mt-auto">
                                 <span className="text-primary font-bold text-lg">R$ {product.price.toFixed(2)}</span>
                                 <button
-                                    onClick={(e) => { e.stopPropagation(); onItemClick(product); }}
+                                    onClick={(e) => { e.stopPropagation(); onAddToCart(product, 1); }}
                                     className="w-8 h-8 md:w-10 md:h-10 bg-primary text-white rounded-lg flex items-center justify-center hover:bg-primary-dark shadow-md transition-colors"
                                 >
                                     <Plus size={18} />
