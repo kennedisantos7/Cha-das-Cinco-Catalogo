@@ -9,6 +9,7 @@ export interface Product {
   reviews: number;
   stock: number;
   unit: string;
+  images: string[];
 }
 
 export interface CartItem extends Product {

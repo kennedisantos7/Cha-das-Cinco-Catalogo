@@ -42,7 +42,8 @@ const AppContent = () => {
             if (prodData && prodData.length > 0) {
                 const mappedData = prodData.map((item: any) => ({
                     ...item,
-                    image: item.image_url || item.image
+                    image: item.image_url || item.image,
+                    images: item.images || [item.image_url || item.image]
                 }));
                 setProducts(mappedData);
             }

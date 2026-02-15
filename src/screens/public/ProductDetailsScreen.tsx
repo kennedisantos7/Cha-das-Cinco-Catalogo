@@ -4,7 +4,9 @@ import { Product } from '../../types/types';
 
 export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteToggle, favorites }: { product: Product, onBack: () => void, onAddToCart: (p: Product, qty: number) => void, onFavoriteToggle: (id: string) => void, favorites: string[] }) => {
     const [qty, setQty] = useState(1);
+    const [selectedImageIdx, setSelectedImageIdx] = useState(0);
     const isFav = favorites.includes(product.id);
+    const productImages = product.images && product.images.length > 0 ? product.images : [product.image];
 
     return (
         <div className="flex flex-col h-full bg-background-cream md:bg-gray-50/50 md:flex-row md:items-center md:justify-center md:p-10 animate-fade-in">
@@ -20,13 +22,41 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
                 </div>
 
                 {/* Image Section */}
-                <div className="relative w-full md:w-1/2 aspect-square md:aspect-auto md:h-full bg-gray-200 group overflow-hidden">
-                    <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                <div className="relative w-full md:w-1/2 flex flex-col bg-gray-100">
+                    <div className="relative w-full aspect-square md:aspect-auto md:flex-1 overflow-hidden group">
+                        <img
+                            src={productImages[selectedImageIdx]}
+                            alt={product.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
 
-                    {/* Desktop Back Button */}
-                    <button onClick={onBack} className="hidden md:flex absolute top-6 left-6 w-12 h-12 bg-white/90 hover:bg-white rounded-full items-center justify-center shadow-lg text-dark-green transition-all transform hover:scale-105 z-10">
-                        <ChevronLeft size={28} />
-                    </button>
+                        {/* Desktop Back Button */}
+                        <button onClick={onBack} className="hidden md:flex absolute top-6 left-6 w-12 h-12 bg-white/90 hover:bg-white rounded-full items-center justify-center shadow-lg text-dark-green transition-all transform hover:scale-105 z-10">
+                            <ChevronLeft size={28} />
+                        </button>
+
+                        {/* Image Counter Overlay (Mobile) */}
+                        {productImages.length > 1 && (
+                            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 md:hidden bg-black/50 backdrop-blur-md px-3 py-1 rounded-full text-white text-xs font-bold">
+                                {selectedImageIdx + 1} / {productImages.length}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Thumbnails Gallery */}
+                    {productImages.length > 1 && (
+                        <div className="flex gap-3 p-4 md:p-6 overflow-x-auto hide-scrollbar bg-white/50 border-t border-accent-sage/10">
+                            {productImages.map((img, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => setSelectedImageIdx(idx)}
+                                    className={`relative w-16 h-16 md:w-20 md:h-20 rounded-xl overflow-hidden flex-shrink-0 transition-all ${selectedImageIdx === idx ? 'ring-2 ring-primary ring-offset-2 scale-95' : 'opacity-60 hover:opacity-100 hover:scale-105'}`}
+                                >
+                                    <img src={img} alt={`${product.name} thumbnail ${idx + 1}`} className="w-full h-full object-cover" />
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* Details Section */}
