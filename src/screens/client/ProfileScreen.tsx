@@ -2,7 +2,13 @@ import React from 'react';
 import { User, Receipt, Compass, Heart, Settings, ArrowRight, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
-export const ProfileScreen = ({ isLoggedIn, onLoginClick, onLogout, onOrdersClick }: { isLoggedIn: boolean, onLoginClick: () => void, onLogout: () => void, onOrdersClick: () => void }) => {
+export const ProfileScreen = ({ isLoggedIn, onLoginClick, onLogout, onOrdersClick, onSettingsClick }: {
+    isLoggedIn: boolean,
+    onLoginClick: () => void,
+    onLogout: () => void,
+    onOrdersClick: () => void,
+    onSettingsClick: () => void
+}) => {
     const { user } = useAuth();
 
     if (!isLoggedIn || !user) {
@@ -43,7 +49,10 @@ export const ProfileScreen = ({ isLoggedIn, onLoginClick, onLogout, onOrdersClic
                         {['Meus Pedidos', 'Endereços', 'Favoritos', 'Configurações'].map((item, i) => (
                             <div
                                 key={item}
-                                onClick={() => i === 0 ? onOrdersClick() : null}
+                                onClick={() => {
+                                    if (i === 0) onOrdersClick();
+                                    if (i === 3) onSettingsClick();
+                                }}
                                 className="bg-white p-6 flex items-center justify-between group cursor-pointer hover:bg-gray-50 transition-colors"
                             >
                                 <div className="flex items-center gap-4">

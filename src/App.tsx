@@ -22,6 +22,7 @@ import { CartScreen } from './screens/client/CartScreen';
 import { ProfileScreen } from './screens/client/ProfileScreen';
 import { FavoritesScreen } from './screens/client/FavoritesScreen';
 import { OrdersScreen } from './screens/client/OrdersScreen';
+import { SettingsScreen } from './screens/client/SettingsScreen';
 
 const AppContent = () => {
     const [activeScreen, setActiveScreen] = useState<ScreenName>('home');
@@ -134,8 +135,9 @@ const AppContent = () => {
             case 'cart': return <CartScreen onAddToCart={addToCart} onFavoriteToggle={toggleFavorite} favorites={favorites} products={products} cart={cart} onBack={() => setActiveScreen('home')} onClear={clearCart} />;
             case 'search': return <SearchScreen onAddToCart={addToCart} products={products} favorites={favorites} onFavoriteToggle={toggleFavorite} onBack={() => setActiveScreen('home')} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} />;
             case 'favorites': return <FavoritesScreen favorites={favorites} products={products} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} onBack={() => setActiveScreen('home')} onFavoriteToggle={toggleFavorite} />;
-            case 'profile': return <ProfileScreen isLoggedIn={isLoggedIn} onLoginClick={() => setActiveScreen('login')} onLogout={handleLogout} onOrdersClick={() => setActiveScreen('orders')} />;
+            case 'profile': return <ProfileScreen isLoggedIn={isLoggedIn} onLoginClick={() => setActiveScreen('login')} onLogout={handleLogout} onOrdersClick={() => setActiveScreen('orders')} onSettingsClick={() => setActiveScreen('settings')} />;
             case 'orders': return <OrdersScreen onBack={() => setActiveScreen('profile')} onAddToCart={addToCart} />;
+            case 'settings': return <SettingsScreen onBack={() => setActiveScreen('profile')} />;
             default: return <HomeScreen onAddToCart={addToCart} favorites={favorites} onFavoriteToggle={toggleFavorite} products={products} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} onSeeAll={() => setActiveScreen('search')} />;
         }
     };

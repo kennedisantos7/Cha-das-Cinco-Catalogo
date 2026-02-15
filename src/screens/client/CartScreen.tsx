@@ -75,7 +75,7 @@ export const CartScreen = ({
 
     return (
         <div className="h-full bg-background-cream md:bg-gray-50 overflow-y-auto custom-scrollbar">
-            <div className="w-full max-w-5xl mx-auto md:py-10 px-4 md:px-6">
+            <div className="w-full max-w-5xl mx-auto pt-20 md:pt-24 pb-10 px-4 md:px-6">
                 <div className="bg-white md:rounded-3xl shadow-sm md:shadow-xl overflow-hidden mb-10">
                     <div className="flex flex-col md:flex-row">
                         <div className="flex-1 flex flex-col border-b md:border-b-0 md:border-r border-gray-100">

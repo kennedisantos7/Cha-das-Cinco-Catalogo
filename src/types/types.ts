@@ -43,4 +43,5 @@ export type ScreenName =
   | 'profile'
   | 'orders'
   | 'favorites'
+  | 'settings'
   | 'search';
