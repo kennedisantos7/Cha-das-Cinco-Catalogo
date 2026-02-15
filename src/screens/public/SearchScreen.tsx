@@ -1,17 +1,19 @@
+import React, { useState } from 'react';
 import { Search, SlidersHorizontal, Plus, X, Heart } from 'lucide-react';
 import { Product } from '../../types/types';
-import { products } from '../../data/data';
 
 export const SearchScreen = ({
     onBack,
     onItemClick,
     favorites = [],
-    onFavoriteToggle
+    onFavoriteToggle,
+    products
 }: {
     onBack: () => void,
     onItemClick: (p: Product) => void,
     favorites?: string[],
-    onFavoriteToggle?: (id: string) => void
+    onFavoriteToggle?: (id: string) => void,
+    products: Product[]
 }) => {
     const [showFilter, setShowFilter] = useState(false);
 

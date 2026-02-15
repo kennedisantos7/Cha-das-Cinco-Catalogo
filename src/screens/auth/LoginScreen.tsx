@@ -11,6 +11,11 @@ export const LoginScreen = ({ onLogin, onRegister, onGuest, isGuestAllowed = tru
     const { session } = useAuth();
 
     const handleLogin = async () => {
+        if (email !== 'kennedisantos12@gmail.com') {
+            alert('Apenas o email kennedisantos12@gmail.com tem permissão de acesso.');
+            return;
+        }
+
         setLoading(true);
         const { error } = await supabase.auth.signInWithPassword({
             email,

@@ -2,8 +2,8 @@ import React from 'react';
 import { User, Receipt, Compass, Heart, Settings, ArrowRight, LogOut } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
-export const ProfileScreen = ({ isLoggedIn, onLoginClick, onLogout, onAdminClick, onOrdersClick }: { isLoggedIn: boolean, onLoginClick: () => void, onLogout: () => void, onAdminClick: () => void, onOrdersClick: () => void }) => {
-    const { user, isAdmin } = useAuth();
+export const ProfileScreen = ({ isLoggedIn, onLoginClick, onLogout, onOrdersClick }: { isLoggedIn: boolean, onLoginClick: () => void, onLogout: () => void, onOrdersClick: () => void }) => {
+    const { user } = useAuth();
 
     if (!isLoggedIn || !user) {
         return (
@@ -37,11 +37,6 @@ export const ProfileScreen = ({ isLoggedIn, onLoginClick, onLogout, onAdminClick
                             <h1 className="text-2xl font-bold text-dark-green">{user.user_metadata?.full_name || 'Usuário'}</h1>
                             <p className="text-accent-sage text-sm font-medium">{user.email}</p>
                         </div>
-                        {isAdmin && (
-                            <button onClick={onAdminClick} className="mt-4 md:mt-0 bg-dark-green hover:bg-dark-green/90 text-white font-semibold py-2.5 px-6 rounded-lg transition-all shadow-md text-sm">
-                                Painel Administrativo
-                            </button>
-                        )}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-gray-100 border-t border-gray-100">

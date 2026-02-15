@@ -1,7 +1,7 @@
 import React from 'react';
-import { Instagram, Facebook, Mail, ShieldCheck } from 'lucide-react';
+import { Instagram, Facebook, Mail } from 'lucide-react';
 
-export const Footer = ({ onAdminClick }: { onAdminClick: () => void }) => {
+export const Footer = () => {
     return (
         <footer className="bg-dark-green text-white py-12 px-6 mt-auto">
             <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
@@ -45,15 +45,6 @@ export const Footer = ({ onAdminClick }: { onAdminClick: () => void }) => {
 
             <div className="border-t border-white/10 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-accent-sage/60 gap-4">
                 <p>&copy; {new Date().getFullYear()} Chá das Cinco. Todos os direitos reservados.</p>
-
-                {/* Admin Entry Point */}
-                <button
-                    onClick={onAdminClick}
-                    className="flex items-center gap-1 hover:text-white transition-colors opacity-50 hover:opacity-100"
-                >
-                    <ShieldCheck size={14} />
-                    <span>Área Administrativa</span>
-                </button>
             </div>
         </footer>
     );

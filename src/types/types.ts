@@ -34,16 +34,13 @@ export interface Customer {
   ordersCount: number;
 }
 
-export type ScreenName = 
-  | 'login' 
-  | 'register' 
-  | 'home' 
-  | 'product-details' 
-  | 'cart' 
-  | 'profile' 
-  | 'orders' 
-  | 'favorites' 
-  | 'search' 
-  | 'admin-dashboard' 
-  | 'admin-inventory' 
-  | 'admin-customers';
+export type ScreenName =
+  | 'login'
+  | 'register'
+  | 'home'
+  | 'product-details'
+  | 'cart'
+  | 'profile'
+  | 'orders'
+  | 'favorites'
+  | 'search';
