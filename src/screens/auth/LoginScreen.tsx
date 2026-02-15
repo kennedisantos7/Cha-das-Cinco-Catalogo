@@ -4,7 +4,7 @@ import { User, ChevronLeft } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { supabase } from '../../lib/supabase';
 
-export const LoginScreen = ({ onLogin, onRegister, onGuest, isGuestAllowed = true }: { onLogin: () => void, onRegister: () => void, onGuest: () => void, isGuestAllowed?: boolean }) => {
+export const LoginScreen = ({ onLogin, onRegister }: { onLogin: () => void, onRegister: () => void }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -68,12 +68,6 @@ export const LoginScreen = ({ onLogin, onRegister, onGuest, isGuestAllowed = tru
                     >
                         {loading ? 'Entrando...' : 'Entrar'}
                     </button>
-
-                    {isGuestAllowed && (
-                        <button onClick={onGuest} className="w-full bg-transparent border-2 border-dark-green/10 text-dark-green font-bold text-sm py-3 rounded-xl hover:bg-dark-green/5 transition-all">
-                            Continuar sem login
-                        </button>
-                    )}
                 </div>
 
                 <p className="text-center text-sm text-dark-green/70 mt-8 cursor-pointer hover:text-primary transition-colors" onClick={onRegister}>

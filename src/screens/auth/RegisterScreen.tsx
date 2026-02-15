@@ -25,7 +25,8 @@ export const RegisterScreen = ({ onBack, onRegister }: { onBack: () => void, onR
         if (error) {
             alert(error.message);
         } else {
-            alert('Cadastro realizado com sucesso! Verifique seu email ou faça login.');
+            // Se session vier no sign up, é porque o auto-confirm está ligado ou o usuário já logou
+            alert('Cadastro realizado com sucesso! Verifique seu email caso necessário ou faça login agora.');
             onRegister();
         }
     };
