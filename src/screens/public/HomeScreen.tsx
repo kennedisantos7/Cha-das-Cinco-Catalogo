@@ -1,8 +1,15 @@
-import React from 'react';
 import { Heart, Plus } from 'lucide-react';
-import { Product } from '../../types/types';
+import { Product, ProductCategory } from '../../types/types';
 
-export const HomeScreen = ({ products, onItemClick, onSeeAll, onFavoriteToggle, favorites, onAddToCart }: { products: Product[], onItemClick: (p: Product) => void, onSeeAll: () => void, onFavoriteToggle: (id: string) => void, favorites: string[], onAddToCart: (p: Product, q: number) => void }) => (
+export const HomeScreen = ({ products, onItemClick, onSeeAll, onFavoriteToggle, favorites, onAddToCart, onCategoryClick }: {
+    products: Product[],
+    onItemClick: (p: Product) => void,
+    onSeeAll: () => void,
+    onFavoriteToggle: (id: string) => void,
+    favorites: string[],
+    onAddToCart: (p: Product, q: number) => void,
+    onCategoryClick: (cat: ProductCategory) => void
+}) => (
     <div className="flex-1 w-full max-w-7xl mx-auto md:px-6 py-6 pb-32">
         <div className="relative w-full md:h-[400px] h-[300px] bg-accent-pink rounded-3xl overflow-hidden mb-8 group cursor-pointer shadow-lg" onClick={() => onItemClick(products[0])}>
             <div className="absolute inset-0 flex items-center p-8 md:p-12 z-10 bg-gradient-to-r from-accent-pink/90 to-transparent">
@@ -23,12 +30,12 @@ export const HomeScreen = ({ products, onItemClick, onSeeAll, onFavoriteToggle, 
                 <button className="text-primary text-sm font-bold hover:underline" onClick={onSeeAll}>Ver Todas</button>
             </div>
             <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-4 px-4 md:px-0">
-                {['Pães Tradicionais', 'Pães Sem Glúten', 'Doces', 'Salgados'].map((cat, i) => (
-                    <button key={cat} className="flex flex-col items-center gap-3 min-w-[90px] group transition-all">
+                {(['PÃES TRADICIONAIS', 'PÃES SEM GLÚTEN', 'DOCES', 'SALGADOS'] as ProductCategory[]).map((cat, i) => (
+                    <button key={cat} onClick={() => onCategoryClick(cat)} className="flex flex-col items-center gap-3 min-w-[90px] group transition-all">
                         <div className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center transition-all duration-300 ${i === 0 ? 'bg-primary text-white shadow-lg scale-105' : 'bg-white border border-accent-sage/20 text-accent-sage group-hover:border-primary/50 group-hover:text-primary group-hover:shadow-md'}`}>
                             <span className="text-2xl md:text-3xl">{i === 0 ? '🥖' : i === 1 ? '🌾' : i === 2 ? '🍰' : '🥟'}</span>
                         </div>
-                        <span className={`text-sm font-bold ${i === 0 ? 'text-dark-green' : 'text-accent-sage group-hover:text-dark-green'}`}>{cat}</span>
+                        <span className={`text-sm font-bold text-center leading-tight ${i === 0 ? 'text-dark-green' : 'text-accent-sage group-hover:text-dark-green'}`}>{cat}</span>
                     </button>
                 ))}
             </div>

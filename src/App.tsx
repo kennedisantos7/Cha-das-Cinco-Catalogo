@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { ScreenName, Product, CartItem } from './types/types';
+import { ProductCategory, Product, CartItem, ScreenName } from './types/types';
 import { products as initialProducts } from './data/data';
 
 // Auth
@@ -26,6 +26,7 @@ import { SettingsScreen } from './screens/client/SettingsScreen';
 
 const AppContent = () => {
     const [activeScreen, setActiveScreen] = useState<ScreenName>('home');
+    const [searchCategory, setSearchCategory] = useState<ProductCategory | 'Todos'>('Todos');
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [cart, setCart] = useState<CartItem[]>([]);
     const [favorites, setFavorites] = useState<string[]>([]);
@@ -134,15 +135,15 @@ const AppContent = () => {
         switch (activeScreen) {
             case 'login': return <LoginScreen onLogin={() => setActiveScreen('home')} onRegister={() => setActiveScreen('register')} />;
             case 'register': return <RegisterScreen onBack={() => setActiveScreen('login')} onRegister={() => setActiveScreen('login')} />;
-            case 'home': return <HomeScreen onAddToCart={addToCart} favorites={favorites} onFavoriteToggle={toggleFavorite} products={products} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} onSeeAll={() => setActiveScreen('search')} />;
-            case 'product-details': return selectedProduct ? <ProductDetailsScreen favorites={favorites} onFavoriteToggle={toggleFavorite} product={selectedProduct} onBack={() => setActiveScreen('home')} onAddToCart={addToCart} /> : <HomeScreen onAddToCart={addToCart} favorites={favorites} onFavoriteToggle={toggleFavorite} products={products} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} onSeeAll={() => setActiveScreen('search')} />;
+            case 'home': return <HomeScreen onAddToCart={addToCart} favorites={favorites} onFavoriteToggle={toggleFavorite} products={products} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} onSeeAll={() => { setSearchCategory('Todos'); setActiveScreen('search'); }} onCategoryClick={(cat) => { setSearchCategory(cat); setActiveScreen('search'); }} />;
+            case 'product-details': return selectedProduct ? <ProductDetailsScreen favorites={favorites} onFavoriteToggle={toggleFavorite} product={selectedProduct} onBack={() => setActiveScreen('home')} onAddToCart={addToCart} /> : <HomeScreen onAddToCart={addToCart} favorites={favorites} onFavoriteToggle={toggleFavorite} products={products} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} onSeeAll={() => { setSearchCategory('Todos'); setActiveScreen('search'); }} onCategoryClick={(cat) => { setSearchCategory(cat); setActiveScreen('search'); }} />;
             case 'cart': return <CartScreen onAddToCart={addToCart} onFavoriteToggle={toggleFavorite} favorites={favorites} products={products} cart={cart} onBack={() => setActiveScreen('home')} onClear={clearCart} />;
-            case 'search': return <SearchScreen onAddToCart={addToCart} products={products} favorites={favorites} onFavoriteToggle={toggleFavorite} onBack={() => setActiveScreen('home')} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} />;
+            case 'search': return <SearchScreen onAddToCart={addToCart} products={products} favorites={favorites} onFavoriteToggle={toggleFavorite} onBack={() => setActiveScreen('home')} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} initialCategory={searchCategory} />;
             case 'favorites': return <FavoritesScreen favorites={favorites} products={products} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} onBack={() => setActiveScreen('home')} onFavoriteToggle={toggleFavorite} />;
             case 'profile': return <ProfileScreen isLoggedIn={isLoggedIn} onLoginClick={() => setActiveScreen('login')} onLogout={handleLogout} onOrdersClick={() => setActiveScreen('orders')} onSettingsClick={() => setActiveScreen('settings')} onFavoritesClick={() => setActiveScreen('favorites')} />;
             case 'orders': return <OrdersScreen onBack={() => setActiveScreen('profile')} onAddToCart={addToCart} />;
             case 'settings': return <SettingsScreen onBack={() => setActiveScreen('profile')} />;
-            default: return <HomeScreen onAddToCart={addToCart} favorites={favorites} onFavoriteToggle={toggleFavorite} products={products} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} onSeeAll={() => setActiveScreen('search')} />;
+            default: return <HomeScreen onAddToCart={addToCart} favorites={favorites} onFavoriteToggle={toggleFavorite} products={products} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} onSeeAll={() => { setSearchCategory('Todos'); setActiveScreen('search'); }} onCategoryClick={(cat) => { setSearchCategory(cat); setActiveScreen('search'); }} />;
         }
     };
 

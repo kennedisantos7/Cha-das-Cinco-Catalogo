@@ -1,10 +1,12 @@
+export type ProductCategory = 'PÃES TRADICIONAIS' | 'PÃES SEM GLÚTEN' | 'DOCES' | 'SALGADOS';
+
 export interface Product {
   id: string;
   name: string;
   description: string;
   price: number;
   image: string;
-  category: string;
+  category: ProductCategory;
   rating: number;
   reviews: number;
   stock: number;
