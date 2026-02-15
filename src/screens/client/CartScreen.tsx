@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { ShoppingBag, ChevronLeft, Edit3, ArrowRight, Heart, Plus, Search } from 'lucide-react';
 import { CartItem, Product } from '../../types/types';
+import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../context/AuthContext';
 
 export const CartScreen = ({
     cart,
@@ -19,7 +21,9 @@ export const CartScreen = ({
     onFavoriteToggle: (id: string) => void,
     onAddToCart: (p: Product, q: number) => void
 }) => {
+    const { user } = useAuth();
     const [searchQuery, setSearchQuery] = useState('');
+    const [loading, setLoading] = useState(false);
     const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
     const filteredProducts = products.filter(p =>
@@ -27,13 +31,46 @@ export const CartScreen = ({
         p.category.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const handleCheckout = () => {
+    const handleCheckout = async () => {
+        if (!user) {
+            alert("Por favor, faça login para finalizar o pedido.");
+            return;
+        }
+
+        if (cart.length === 0) return;
+
+        setLoading(true);
+
+        // 1. Save to Supabase
+        const { error } = await supabase.from('orders').insert({
+            user_id: user.id,
+            total: total,
+            items: cart.map(i => ({
+                id: i.id,
+                name: i.name,
+                price: i.price,
+                quantity: i.quantity,
+                image: i.image
+            })),
+            status: 'preparando'
+        });
+
+        setLoading(false);
+
+        if (error) {
+            console.error("Error saving order:", error);
+            alert("Houve um erro ao salvar seu pedido. Tente novamente.");
+            return;
+        }
+
+        // 2. Redirect to WhatsApp
         const phoneNumber = '554499784736';
         const orderSummary = cart.map(i => `• ${i.quantity}x ${i.name} (R$ ${i.price.toFixed(2)} un.)`).join('\n');
         const message = `Olá! Gostaria de fazer um pedido:\n\n${orderSummary}\n\n*Total: R$ ${total.toFixed(2)}*\n\n_Pedido gerado pelo Catálogo Chá das Cinco_`;
 
         const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
+        onClear(); // Clear cart after successful checkout
     };
 
     return (
@@ -103,9 +140,13 @@ export const CartScreen = ({
                                     <div className="h-px bg-gray-200 my-4"></div>
                                     <div className="flex justify-between items-end"><span className="text-lg font-bold text-dark-green">Total</span><span className="text-3xl font-extrabold text-primary">R$ {total.toFixed(2)}</span></div>
                                 </div>
-                                <button onClick={handleCheckout} className="w-full bg-green-600 hover:bg-green-700 active:scale-[0.98] transition-all py-5 px-6 rounded-2xl flex items-center justify-center gap-3 shadow-xl shadow-green-600/20 text-white font-bold text-lg">
-                                    <span>Finalizar Pedido</span>
-                                    <ArrowRight size={22} />
+                                <button
+                                    onClick={handleCheckout}
+                                    disabled={loading}
+                                    className="w-full bg-green-600 hover:bg-green-700 active:scale-[0.98] transition-all py-5 px-6 rounded-2xl flex items-center justify-center gap-3 shadow-xl shadow-green-600/20 text-white font-bold text-lg disabled:opacity-70 disabled:cursor-not-allowed"
+                                >
+                                    <span>{loading ? 'Processando...' : 'Finalizar Pedido'}</span>
+                                    {!loading && <ArrowRight size={22} />}
                                 </button>
                                 <p className="text-center text-[10px] text-gray-400 mt-6 px-4 leading-relaxed uppercase tracking-widest font-bold">
                                     Finalize sua compra pelo WhatsApp

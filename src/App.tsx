@@ -35,18 +35,33 @@ const AppContent = () => {
     const isLoggedIn = !!session;
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            const { data } = await supabase.from('products').select('*');
-            if (data && data.length > 0) {
-                const mappedData = data.map((item: any) => ({
+        const fetchData = async () => {
+            // Fetch Products
+            const { data: prodData } = await supabase.from('products').select('*');
+            if (prodData && prodData.length > 0) {
+                const mappedData = prodData.map((item: any) => ({
                     ...item,
                     image: item.image_url || item.image
                 }));
                 setProducts(mappedData);
             }
+
+            // Fetch Favorites if logged in
+            if (session?.user?.id) {
+                const { data: favData } = await supabase
+                    .from('user_favorites')
+                    .select('product_id')
+                    .eq('user_id', session.user.id);
+
+                if (favData) {
+                    setFavorites(favData.map(f => f.product_id));
+                }
+            } else {
+                setFavorites([]);
+            }
         };
-        fetchProducts();
-    }, []);
+        fetchData();
+    }, [session?.user?.id]);
 
     const addToCart = (product: Product, quantity: number) => {
         setCart(prev => {
@@ -59,19 +74,36 @@ const AppContent = () => {
         setActiveScreen('cart');
     };
 
-    const toggleFavorite = (id: string) => {
-        if (!isLoggedIn) {
+    const toggleFavorite = async (id: string) => {
+        if (!isLoggedIn || !session?.user?.id) {
             alert("Por favor, faça login para favoritar itens.");
             setActiveScreen('login');
             return;
         }
-        setFavorites(prev => prev.includes(id) ? prev.filter(fid => id !== fid) : [...prev, id]);
+
+        const isFavorited = favorites.includes(id);
+
+        // Optimistic update
+        setFavorites(prev => isFavorited ? prev.filter(fid => id !== fid) : [...prev, id]);
+
+        if (isFavorited) {
+            await supabase
+                .from('user_favorites')
+                .delete()
+                .eq('user_id', session.user.id)
+                .eq('product_id', id);
+        } else {
+            await supabase
+                .from('user_favorites')
+                .insert({ user_id: session.user.id, product_id: id });
+        }
     };
 
     const clearCart = () => setCart([]);
 
     const handleLogout = async () => {
         await signOut();
+        setFavorites([]); // Clear favorites on logout
         setActiveScreen('home');
     };
 
@@ -93,7 +125,7 @@ const AppContent = () => {
             case 'search': return <SearchScreen onAddToCart={addToCart} products={products} favorites={favorites} onFavoriteToggle={toggleFavorite} onBack={() => setActiveScreen('home')} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} />;
             case 'favorites': return <FavoritesScreen favorites={favorites} products={products} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} onBack={() => setActiveScreen('home')} onFavoriteToggle={toggleFavorite} />;
             case 'profile': return <ProfileScreen isLoggedIn={isLoggedIn} onLoginClick={() => setActiveScreen('login')} onLogout={handleLogout} onOrdersClick={() => setActiveScreen('orders')} />;
-            case 'orders': return <OrdersScreen onBack={() => setActiveScreen('profile')} />;
+            case 'orders': return <OrdersScreen onBack={() => setActiveScreen('profile')} onAddToCart={addToCart} />;
             default: return <HomeScreen onAddToCart={addToCart} favorites={favorites} onFavoriteToggle={toggleFavorite} products={products} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} onSeeAll={() => setActiveScreen('search')} />;
         }
     };

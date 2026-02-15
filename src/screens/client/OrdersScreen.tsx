@@ -11,7 +11,7 @@ interface Order {
     items: any[]; // JSON array of items
 }
 
-export const OrdersScreen = ({ onBack }: { onBack: () => void }) => {
+export const OrdersScreen = ({ onBack, onAddToCart }: { onBack: () => void, onAddToCart: (p: any, q: number) => void }) => {
     const { user } = useAuth();
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);
@@ -84,8 +84,18 @@ export const OrdersScreen = ({ onBack }: { onBack: () => void }) => {
                                         </span>
                                     </div>
                                     <div className="border-t border-gray-100 pt-4 flex justify-between items-end">
-                                        <div className="text-sm text-slate-500">
-                                            {order.items?.length || 0} Itens
+                                        <div className="space-y-1">
+                                            <div className="text-sm text-slate-500">
+                                                {order.items?.length || 0} Itens
+                                            </div>
+                                            <button
+                                                onClick={() => {
+                                                    order.items.forEach(item => onAddToCart(item, item.quantity));
+                                                }}
+                                                className="text-xs font-bold text-primary hover:bg-primary/5 px-2 py-1 rounded-md border border-primary/20 transition-all uppercase tracking-wider"
+                                            >
+                                                Comprar Novamente
+                                            </button>
                                         </div>
                                         <div className="text-right">
                                             <span className="text-xs text-accent-sage font-bold uppercase block mb-0.5">Total</span>
