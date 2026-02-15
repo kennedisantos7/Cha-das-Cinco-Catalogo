@@ -36,7 +36,11 @@ export const LoginScreen = ({ onLogin, onRegister }: { onLogin: () => void, onRe
                         <span className="text-5xl">☕</span>
                     </div>
                     <h1 className="text-4xl font-bold text-dark-green tracking-tight mb-2">Chá das Cinco</h1>
-                    <p className="text-accent-sage font-medium uppercase tracking-widest text-xs bg-white/50 px-4 py-1 rounded-full">Artesanal & Delicado</p>
+                    <p className="text-accent-sage font-medium uppercase tracking-widest text-xs bg-white/50 px-4 py-1 rounded-full mb-6">Artesanal & Delicado</p>
+
+                    <p className="text-sm text-dark-green/70 cursor-pointer hover:text-primary transition-colors" onClick={onRegister}>
+                        Não tem uma conta? <span className="text-primary font-bold underline">Cadastre-se agora</span>
+                    </p>
                 </div>
 
                 <div className="bg-white/40 backdrop-blur-lg border border-white/50 rounded-3xl p-8 shadow-xl space-y-5">
@@ -70,9 +74,6 @@ export const LoginScreen = ({ onLogin, onRegister }: { onLogin: () => void, onRe
                     </button>
                 </div>
 
-                <p className="text-center text-sm text-dark-green/70 mt-8 cursor-pointer hover:text-primary transition-colors" onClick={onRegister}>
-                    Não tem uma conta? <span className="text-primary font-bold">Cadastre-se</span>
-                </p>
             </div>
         </div>
     );

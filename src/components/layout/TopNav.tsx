@@ -26,6 +26,7 @@ export const TopNav = ({ active, onChange, cartCount, isLoggedIn, onLoginClick }
       <button onClick={() => onChange('home')} className={`hover:text-primary transition-colors ${active === 'home' ? 'text-primary font-bold' : ''}`}>Início</button>
       <button onClick={() => onChange('search')} className={`hover:text-primary transition-colors ${active === 'search' ? 'text-primary font-bold' : ''}`}>Catálogo</button>
       <button onClick={() => onChange('favorites')} className={`hover:text-primary transition-colors ${active === 'favorites' ? 'text-primary font-bold' : ''}`}>Favoritos</button>
+      <button onClick={() => onChange('orders')} className={`hover:text-primary transition-colors ${active === 'orders' ? 'text-primary font-bold' : ''}`}>Meus Pedidos</button>
     </div>
 
     <div className="flex items-center gap-4">
