@@ -40,11 +40,14 @@ const AppContent = () => {
             // Fetch Products
             const { data: prodData } = await supabase.from('products').select('*');
             if (prodData && prodData.length > 0) {
-                const mappedData = prodData.map((item: any) => ({
-                    ...item,
-                    image: item.image_url || item.image,
-                    images: item.images || [item.image_url || item.image]
-                }));
+                const mappedData = prodData.map((item: any) => {
+                    const images = item.images && item.images.length > 0 ? item.images : [item.image_url || item.image];
+                    return {
+                        ...item,
+                        images,
+                        image: images[0]
+                    };
+                });
                 setProducts(mappedData);
             }
 
