@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
-import { Search, SlidersHorizontal, Plus, X } from 'lucide-react';
+import { Search, SlidersHorizontal, Plus, X, Heart } from 'lucide-react';
 import { Product } from '../../types/types';
 import { products } from '../../data/data';
 
-export const SearchScreen = ({ onBack, onItemClick }: { onBack: () => void, onItemClick: (p: Product) => void }) => {
+export const SearchScreen = ({
+    onBack,
+    onItemClick,
+    favorites = [],
+    onFavoriteToggle
+}: {
+    onBack: () => void,
+    onItemClick: (p: Product) => void,
+    favorites?: string[],
+    onFavoriteToggle?: (id: string) => void
+}) => {
     const [showFilter, setShowFilter] = useState(false);
 
     return (
@@ -20,30 +29,42 @@ export const SearchScreen = ({ onBack, onItemClick }: { onBack: () => void, onIt
                 <section className="mb-8 overflow-x-auto hide-scrollbar">
                     <div className="flex space-x-3 pb-2">
                         <button className="flex-shrink-0 px-6 py-2.5 bg-primary text-white rounded-full font-bold shadow-md shadow-primary/20 text-sm hover:scale-105 transition-transform">Todos</button>
-                        <button className="flex-shrink-0 px-6 py-2.5 bg-white text-dark-green font-bold rounded-full shadow-sm text-sm hover:bg-gray-50 border border-gray-100">Pães</button>
-                        <button className="flex-shrink-0 px-6 py-2.5 bg-white text-dark-green font-bold rounded-full shadow-sm text-sm hover:bg-gray-50 border border-gray-100">Bolos</button>
-                        <button className="flex-shrink-0 px-6 py-2.5 bg-white text-dark-green font-bold rounded-full shadow-sm text-sm hover:bg-gray-50 border border-gray-100">Sem Glúten</button>
+                        <button className="flex-shrink-0 px-6 py-2.5 bg-white text-dark-green font-bold rounded-full shadow-sm text-sm hover:bg-gray-50 border border-gray-100">Pães Tradicionais</button>
+                        <button className="flex-shrink-0 px-6 py-2.5 bg-white text-dark-green font-bold rounded-full shadow-sm text-sm hover:bg-gray-50 border border-gray-100">Pães Sem Glúten</button>
+                        <button className="flex-shrink-0 px-6 py-2.5 bg-white text-dark-green font-bold rounded-full shadow-sm text-sm hover:bg-gray-50 border border-gray-100">Doces</button>
+                        <button className="flex-shrink-0 px-6 py-2.5 bg-white text-dark-green font-bold rounded-full shadow-sm text-sm hover:bg-gray-50 border border-gray-100">Salgados</button>
                     </div>
                 </section>
 
                 <main className="flex-1 overflow-y-auto hide-scrollbar md:pr-2 custom-scrollbar">
                     <h2 className="text-xl font-bold text-dark-green mb-6">Resultados</h2>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                        {products.map(p => (
-                            <div key={p.id} onClick={() => onItemClick(p)} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 cursor-pointer group transition-all duration-300">
-                                <div className="relative aspect-square overflow-hidden">
-                                    <img src={p.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={p.name} />
-                                </div>
-                                <div className="p-4">
-                                    <h3 className="font-bold text-dark-green text-sm md:text-base truncate mb-1">{p.name}</h3>
-                                    <p className="text-xs text-accent-sage font-medium mb-3">{p.category}</p>
-                                    <div className="flex justify-between items-center">
-                                        <span className="font-bold text-primary text-lg">R$ {p.price.toFixed(2)}</span>
-                                        <button className="w-8 h-8 bg-gray-100 hover:bg-primary hover:text-white rounded-lg flex items-center justify-center transition-colors text-dark-green"><Plus size={18} /></button>
+                        {products.map(p => {
+                            const isFav = favorites.includes(p.id);
+                            return (
+                                <div key={p.id} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl border border-gray-100 cursor-pointer group transition-all duration-300 flex flex-col">
+                                    <div className="relative aspect-square overflow-hidden" onClick={() => onItemClick(p)}>
+                                        <img src={p.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={p.name} />
+                                        {onFavoriteToggle && (
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); onFavoriteToggle(p.id); }}
+                                                className={`absolute top-2 right-2 w-8 h-8 backdrop-blur-md rounded-full flex items-center justify-center shadow-sm transition-all hover:scale-110 ${isFav ? 'bg-accent-pink text-bordeaux' : 'bg-white/80 text-primary'}`}
+                                            >
+                                                <Heart size={16} fill={isFav ? "currentColor" : "none"} />
+                                            </button>
+                                        )}
+                                    </div>
+                                    <div className="p-4 flex-1 flex flex-col">
+                                        <h3 className="font-bold text-dark-green text-sm md:text-base mb-1 truncate" onClick={() => onItemClick(p)}>{p.name}</h3>
+                                        <p className="text-xs text-accent-sage font-medium mb-3">{p.category}</p>
+                                        <div className="flex justify-between items-center mt-auto">
+                                            <span className="font-bold text-primary text-lg">R$ {p.price.toFixed(2)}</span>
+                                            <button className="w-8 h-8 bg-gray-100 hover:bg-primary hover:text-white rounded-lg flex items-center justify-center transition-colors text-dark-green"><Plus size={18} /></button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </main>
             </div>
@@ -60,9 +81,10 @@ export const SearchScreen = ({ onBack, onItemClick }: { onBack: () => void, onIt
                             <section>
                                 <h3 className="text-dark-green font-bold text-lg mb-4">Categorias</h3>
                                 <div className="flex flex-wrap gap-2">
-                                    <span className="px-4 py-2 rounded-full bg-primary text-white font-bold text-sm shadow-md">Pães Artesanais</span>
+                                    <span className="px-4 py-2 rounded-full bg-primary text-white font-bold text-sm shadow-md">Pães Tradicionais</span>
+                                    <span className="px-4 py-2 rounded-full bg-white border border-gray-200 text-dark-green font-medium text-sm hover:bg-gray-50 cursor-pointer">Pães Sem Glúten</span>
                                     <span className="px-4 py-2 rounded-full bg-white border border-gray-200 text-dark-green font-medium text-sm hover:bg-gray-50 cursor-pointer">Doces</span>
-                                    <span className="px-4 py-2 rounded-full bg-white border border-gray-200 text-dark-green font-medium text-sm hover:bg-gray-50 cursor-pointer">Bebidas</span>
+                                    <span className="px-4 py-2 rounded-full bg-white border border-gray-200 text-dark-green font-medium text-sm hover:bg-gray-50 cursor-pointer">Salgados</span>
                                 </div>
                             </section>
                             <div className="h-px bg-accent-sage/20"></div>

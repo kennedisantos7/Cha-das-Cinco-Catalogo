@@ -11,6 +11,7 @@ import { supabase } from './lib/supabase';
 import { TopNav } from './components/layout/TopNav';
 import { BottomNav } from './components/layout/BottomNav';
 import { Sidebar } from './components/layout/Sidebar';
+import { Footer } from './components/layout/Footer';
 
 // Screens
 import { LoginScreen } from './screens/auth/LoginScreen';
@@ -20,6 +21,8 @@ import { SearchScreen } from './screens/public/SearchScreen';
 import { ProductDetailsScreen } from './screens/public/ProductDetailsScreen';
 import { CartScreen } from './screens/client/CartScreen';
 import { ProfileScreen } from './screens/client/ProfileScreen';
+import { FavoritesScreen } from './screens/client/FavoritesScreen';
+import { OrdersScreen } from './screens/client/OrdersScreen';
 import { AdminDashboard } from './screens/admin/AdminDashboard';
 import { AdminInventory } from './screens/admin/AdminInventory';
 import { AdminCustomers } from './screens/admin/AdminCustomers';
@@ -86,9 +89,10 @@ const AppContent = () => {
             case 'home': return <HomeScreen favorites={favorites} onFavoriteToggle={toggleFavorite} products={products} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} onSeeAll={() => setActiveScreen('search')} />;
             case 'product-details': return selectedProduct ? <ProductDetailsScreen favorites={favorites} onFavoriteToggle={toggleFavorite} product={selectedProduct} onBack={() => setActiveScreen('home')} onAddToCart={addToCart} /> : <HomeScreen favorites={favorites} onFavoriteToggle={toggleFavorite} products={products} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} onSeeAll={() => setActiveScreen('search')} />;
             case 'cart': return <CartScreen cart={cart} onBack={() => setActiveScreen('home')} onClear={clearCart} />;
-            case 'search': return <SearchScreen onBack={() => setActiveScreen('home')} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} />;
-            case 'favorites': return isLoggedIn ? <SearchScreen onBack={() => setActiveScreen('home')} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} /> : <LoginScreen onLogin={() => setActiveScreen('home')} onGuest={() => setActiveScreen('home')} onRegister={() => setActiveScreen('register')} />;
-            case 'profile': return <ProfileScreen isLoggedIn={isLoggedIn} onLoginClick={() => setActiveScreen('login')} onLogout={handleLogout} onAdminClick={() => setActiveScreen('admin-dashboard')} />;
+            case 'search': return <SearchScreen favorites={favorites} onFavoriteToggle={toggleFavorite} onBack={() => setActiveScreen('home')} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} />;
+            case 'favorites': return isLoggedIn ? <FavoritesScreen favorites={favorites} products={products} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} onBack={() => setActiveScreen('home')} onFavoriteToggle={toggleFavorite} /> : <LoginScreen onLogin={() => setActiveScreen('home')} onGuest={() => setActiveScreen('home')} onRegister={() => setActiveScreen('register')} />;
+            case 'profile': return <ProfileScreen isLoggedIn={isLoggedIn} onLoginClick={() => setActiveScreen('login')} onLogout={handleLogout} onAdminClick={() => setActiveScreen('admin-dashboard')} onOrdersClick={() => setActiveScreen('orders')} />;
+            case 'orders': return isLoggedIn ? <OrdersScreen onBack={() => setActiveScreen('profile')} /> : <LoginScreen onLogin={() => setActiveScreen('orders')} onGuest={() => setActiveScreen('home')} onRegister={() => setActiveScreen('register')} />;
 
             // Admin Screens (Protected)
             case 'admin-dashboard': return isAdmin ? <AdminDashboard /> : <LoginScreen onLogin={() => setActiveScreen('admin-dashboard')} onGuest={() => setActiveScreen('home')} onRegister={() => setActiveScreen('register')} />;
@@ -122,6 +126,20 @@ const AppContent = () => {
                 <div className="flex-1 overflow-hidden relative flex flex-col pt-0 md:pt-20">
                     {renderScreen()}
                 </div>
+
+                {/* Footer logic */}
+                {!isAuthScreen && !isAdminScreen && activeScreen !== 'cart' && (
+                    <Footer onAdminClick={() => {
+                        if (isAdmin) {
+                            setActiveScreen('admin-dashboard');
+                        } else {
+                            // If not logged in or not admin, go to login
+                            // You might want a specific 'admin-login' state if distinguishing is needed,
+                            // but for now reusing 'login' is fine.
+                            setActiveScreen('login');
+                        }
+                    }} />
+                )}
 
                 {/* Bottom Nav for Mobile */}
                 {!isAuthScreen && !selectedProduct && activeScreen !== 'cart' && activeScreen !== 'product-details' && !isAdminScreen && (

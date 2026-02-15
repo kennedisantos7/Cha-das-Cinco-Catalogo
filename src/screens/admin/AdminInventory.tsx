@@ -156,11 +156,11 @@ export const AdminInventory = () => {
                                 <label className="block text-sm font-bold text-slate-700 mb-1">Categoria</label>
                                 <select className="w-full border rounded-lg p-2.5" value={category} onChange={e => setCategory(e.target.value)}>
                                     <option value="">Selecione...</option>
-                                    <option value="Pães">Pães</option>
-                                    <option value="Bolos">Bolos</option>
-                                    <option value="Chás">Chás</option>
+                                    <option value="Pães Tradicionais">Pães Tradicionais</option>
+                                    <option value="Pães Sem Glúten">Pães Sem Glúten</option>
+                                    <option value="Doces">Doces</option>
                                     <option value="Salgados">Salgados</option>
-                                    <option value="Outros">Outros</option>
+                                    <option value="Bebidas">Bebidas</option>
                                 </select>
                             </div>
                             <div>

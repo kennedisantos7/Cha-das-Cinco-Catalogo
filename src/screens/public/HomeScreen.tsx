@@ -23,10 +23,10 @@ export const HomeScreen = ({ products, onItemClick, onSeeAll, onFavoriteToggle, 
                 <button className="text-primary text-sm font-bold hover:underline" onClick={onSeeAll}>Ver Todas</button>
             </div>
             <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-4 px-4 md:px-0">
-                {['Pães', 'Bolos', 'Chás', 'Biscoitos', 'Salgados'].map((cat, i) => (
+                {['Pães Tradicionais', 'Pães Sem Glúten', 'Doces', 'Salgados'].map((cat, i) => (
                     <button key={cat} className="flex flex-col items-center gap-3 min-w-[90px] group transition-all">
                         <div className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center transition-all duration-300 ${i === 0 ? 'bg-primary text-white shadow-lg scale-105' : 'bg-white border border-accent-sage/20 text-accent-sage group-hover:border-primary/50 group-hover:text-primary group-hover:shadow-md'}`}>
-                            <span className="text-2xl md:text-3xl">{i === 0 ? '🥐' : i === 1 ? '🍰' : i === 2 ? '☕' : i === 3 ? '🍪' : '🍕'}</span>
+                            <span className="text-2xl md:text-3xl">{i === 0 ? '🥖' : i === 1 ? '🌾' : i === 2 ? '🍰' : '🥟'}</span>
                         </div>
                         <span className={`text-sm font-bold ${i === 0 ? 'text-dark-green' : 'text-accent-sage group-hover:text-dark-green'}`}>{cat}</span>
                     </button>
