@@ -10,11 +10,6 @@ export const RegisterScreen = ({ onBack, onRegister }: { onBack: () => void, onR
     const [loading, setLoading] = useState(false);
 
     const handleRegister = async () => {
-        if (email !== 'kennedisantos12@gmail.com') {
-            alert('Apenas o email kennedisantos12@gmail.com tem permissão para cadastrar.');
-            return;
-        }
-
         setLoading(true);
         const { error } = await supabase.auth.signUp({
             email,
