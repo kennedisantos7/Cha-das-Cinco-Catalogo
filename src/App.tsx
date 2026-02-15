@@ -68,13 +68,13 @@ const AppContent = () => {
         fetchData();
     }, [session?.user?.id]);
 
-    const addToCart = (product: Product, quantity: number) => {
+    const addToCart = (product: Product, quantity: number, notes?: string) => {
         setCart(prev => {
-            const existing = prev.find(p => p.id === product.id);
+            const existing = prev.find(p => p.id === product.id && p.notes === notes);
             if (existing) {
-                return prev.map(p => p.id === product.id ? { ...p, quantity: p.quantity + quantity } : p);
+                return prev.map(p => (p.id === product.id && p.notes === notes) ? { ...p, quantity: p.quantity + quantity } : p);
             }
-            return [...prev, { ...product, quantity }];
+            return [...prev, { ...product, quantity, notes }];
         });
         setActiveScreen('cart');
     };
@@ -139,7 +139,7 @@ const AppContent = () => {
             case 'cart': return <CartScreen onAddToCart={addToCart} onFavoriteToggle={toggleFavorite} favorites={favorites} products={products} cart={cart} onBack={() => setActiveScreen('home')} onClear={clearCart} />;
             case 'search': return <SearchScreen onAddToCart={addToCart} products={products} favorites={favorites} onFavoriteToggle={toggleFavorite} onBack={() => setActiveScreen('home')} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} />;
             case 'favorites': return <FavoritesScreen favorites={favorites} products={products} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} onBack={() => setActiveScreen('home')} onFavoriteToggle={toggleFavorite} />;
-            case 'profile': return <ProfileScreen isLoggedIn={isLoggedIn} onLoginClick={() => setActiveScreen('login')} onLogout={handleLogout} onOrdersClick={() => setActiveScreen('orders')} onSettingsClick={() => setActiveScreen('settings')} />;
+            case 'profile': return <ProfileScreen isLoggedIn={isLoggedIn} onLoginClick={() => setActiveScreen('login')} onLogout={handleLogout} onOrdersClick={() => setActiveScreen('orders')} onSettingsClick={() => setActiveScreen('settings')} onFavoritesClick={() => setActiveScreen('favorites')} />;
             case 'orders': return <OrdersScreen onBack={() => setActiveScreen('profile')} onAddToCart={addToCart} />;
             case 'settings': return <SettingsScreen onBack={() => setActiveScreen('profile')} />;
             default: return <HomeScreen onAddToCart={addToCart} favorites={favorites} onFavoriteToggle={toggleFavorite} products={products} onItemClick={(p) => { setSelectedProduct(p); setActiveScreen('product-details'); }} onSeeAll={() => setActiveScreen('search')} />;
@@ -180,7 +180,7 @@ const AppContent = () => {
                 )}
             </div>
 
-            {!isAuthScreen && (
+            {!isAuthScreen && activeScreen !== 'product-details' && (
                 <BottomNav
                     active={activeScreen}
                     onChange={setActiveScreen}

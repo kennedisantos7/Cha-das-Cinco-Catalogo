@@ -23,6 +23,7 @@ export const CartScreen = ({
 }) => {
     const { user } = useAuth();
     const [searchQuery, setSearchQuery] = useState('');
+    const [orderNotes, setOrderNotes] = useState('');
     const [loading, setLoading] = useState(false);
     const total = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
@@ -50,7 +51,8 @@ export const CartScreen = ({
                 name: i.name,
                 price: i.price,
                 quantity: i.quantity,
-                image: i.image
+                image: i.image,
+                notes: i.notes
             })),
             status: 'preparando'
         });
@@ -65,8 +67,19 @@ export const CartScreen = ({
 
         // 2. Redirect to WhatsApp
         const phoneNumber = '554499784736';
-        const orderSummary = cart.map(i => `• ${i.quantity}x ${i.name} (R$ ${i.price.toFixed(2)} un.)`).join('\n');
-        const message = `Olá! Gostaria de fazer um pedido:\n\n${orderSummary}\n\n*Total: R$ ${total.toFixed(2)}*\n\n_Pedido gerado pelo Catálogo Chá das Cinco_`;
+        const orderSummary = cart.map(i => {
+            let itemText = `• ${i.quantity}x ${i.name} (R$ ${i.price.toFixed(2)} un.)`;
+            if (i.notes) itemText += `\n   _Obs: ${i.notes}_`;
+            return itemText;
+        }).join('\n');
+
+        let message = `Olá! Gostaria de fazer um pedido:\n\n${orderSummary}\n\n*Total: R$ ${total.toFixed(2)}*`;
+
+        if (orderNotes.trim()) {
+            message += `\n\n*Observações Gerais:*\n${orderNotes}`;
+        }
+
+        message += `\n\n_Pedido gerado pelo Catálogo Chá das Cinco_`;
 
         const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
@@ -106,7 +119,12 @@ export const CartScreen = ({
                                                     <h3 className="font-bold text-lg text-dark-green leading-tight truncate pr-4">{item.name}</h3>
                                                     <span className="font-bold text-primary whitespace-nowrap">R$ {(item.price * item.quantity).toFixed(2)}</span>
                                                 </div>
-                                                <p className="text-sm text-accent-sage font-medium mb-3">{item.category}</p>
+                                                <p className="text-sm text-accent-sage font-medium mb-1">{item.category}</p>
+                                                {item.notes && (
+                                                    <p className="text-xs text-primary font-medium italic mb-2 px-2 py-1 bg-primary/5 rounded-lg inline-block line-clamp-1">
+                                                        Obs: {item.notes}
+                                                    </p>
+                                                )}
                                                 <div className="flex items-center justify-between">
                                                     <div className="text-xs text-gray-400 font-bold bg-white px-2 py-1 rounded border border-gray-100">
                                                         R$ {item.price.toFixed(2)} un.
@@ -125,7 +143,13 @@ export const CartScreen = ({
                                             <Edit3 size={16} className="text-primary" />
                                             Observações do Pedido
                                         </label>
-                                        <textarea className="w-full bg-white border-gray-200 rounded-xl p-4 text-sm focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-400 transition-all shadow-sm" placeholder="Ex: Entregar na portaria, campainha não funciona..." rows={2}></textarea>
+                                        <textarea
+                                            value={orderNotes}
+                                            onChange={(e) => setOrderNotes(e.target.value)}
+                                            className="w-full bg-white border-gray-200 rounded-xl p-4 text-sm focus:ring-2 focus:ring-primary focus:border-transparent placeholder-gray-400 transition-all shadow-sm"
+                                            placeholder="Ex: Entregar na portaria, campainha não funciona..."
+                                            rows={2}
+                                        ></textarea>
                                     </div>
                                 )}
                             </div>

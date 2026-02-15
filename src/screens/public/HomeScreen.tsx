@@ -45,9 +45,9 @@ export const HomeScreen = ({ products, onItemClick, onSeeAll, onFavoriteToggle, 
                                 <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                                 <button
                                     onClick={(e) => { e.stopPropagation(); onFavoriteToggle(product.id); }}
-                                    className={`absolute top-2 right-2 w-8 h-8 md:w-10 md:h-10 backdrop-blur-md rounded-full flex items-center justify-center shadow-sm transition-all hover:scale-110 ${isFav ? 'bg-accent-pink text-bordeaux' : 'bg-white/80 text-primary'}`}
+                                    className={`absolute top-2 right-2 w-11 h-11 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg transition-all active:scale-90 ${isFav ? 'bg-accent-pink text-bordeaux' : 'bg-white/80 text-primary'}`}
                                 >
-                                    <Heart size={18} fill={isFav ? "currentColor" : "none"} />
+                                    <Heart size={22} fill={isFav ? "currentColor" : "none"} />
                                 </button>
                             </div>
                             <h4 className="font-bold text-sm md:text-base mb-1 text-dark-green leading-snug truncate" onClick={() => onItemClick(product)}>{product.name}</h4>

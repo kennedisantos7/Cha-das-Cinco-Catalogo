@@ -2,8 +2,15 @@ import React, { useState } from 'react';
 import { ChevronLeft, Heart, Share2, Edit3, Minus, Plus, ShoppingBag } from 'lucide-react';
 import { Product } from '../../types/types';
 
-export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteToggle, favorites }: { product: Product, onBack: () => void, onAddToCart: (p: Product, qty: number) => void, onFavoriteToggle: (id: string) => void, favorites: string[] }) => {
+export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteToggle, favorites }: {
+    product: Product,
+    onBack: () => void,
+    onAddToCart: (p: Product, qty: number, notes?: string) => void,
+    onFavoriteToggle: (id: string) => void,
+    favorites: string[]
+}) => {
     const [qty, setQty] = useState(1);
+    const [notes, setNotes] = useState('');
     const [selectedImageIdx, setSelectedImageIdx] = useState(0);
     const isFav = favorites.includes(product.id);
     const productImages = product.images && product.images.length > 0 ? product.images : [product.image];
@@ -13,11 +20,17 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
             {/* Mobile Layout Wrapper / Desktop Modal-like Card */}
             <div className="flex flex-col h-full md:h-auto md:max-h-[85vh] md:w-full md:max-w-6xl md:bg-white md:rounded-3xl md:shadow-2xl md:overflow-hidden md:flex-row relative">
 
-                <div className="md:hidden absolute top-4 left-6 right-6 flex justify-between z-20">
-                    <button onClick={onBack} className="w-10 h-10 flex items-center justify-center bg-white/80 backdrop-blur rounded-full shadow-sm text-dark-green"><ChevronLeft size={24} /></button>
-                    <div className="flex gap-3">
-                        <button onClick={() => onFavoriteToggle(product.id)} className={`w-10 h-10 flex items-center justify-center bg-white/80 backdrop-blur rounded-full shadow-sm ${isFav ? 'text-bordeaux' : 'text-accent-pink'}`}><Heart fill={isFav ? "currentColor" : "none"} size={24} /></button>
-                        <button className="w-10 h-10 flex items-center justify-center bg-white/80 backdrop-blur rounded-full shadow-sm text-dark-green"><Share2 size={24} /></button>
+                <div className="md:hidden absolute top-6 left-6 right-6 flex justify-between z-20">
+                    <button onClick={onBack} className="w-12 h-12 flex items-center justify-center bg-white/90 backdrop-blur-md rounded-full shadow-lg text-dark-green active:scale-90 transition-all">
+                        <ChevronLeft size={28} />
+                    </button>
+                    <div className="flex gap-4">
+                        <button onClick={() => onFavoriteToggle(product.id)} className={`w-12 h-12 flex items-center justify-center bg-white/90 backdrop-blur-md rounded-full shadow-lg active:scale-90 transition-all ${isFav ? 'text-bordeaux' : 'text-accent-pink'}`}>
+                            <Heart fill={isFav ? "currentColor" : "none"} size={26} />
+                        </button>
+                        <button className="w-12 h-12 flex items-center justify-center bg-white/90 backdrop-blur-md rounded-full shadow-lg text-dark-green active:scale-90 transition-all">
+                            <Share2 size={26} />
+                        </button>
                     </div>
                 </div>
 
@@ -100,7 +113,12 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
                                 <Edit3 size={18} className="text-primary" />
                                 <h3 className="text-sm font-bold uppercase tracking-widest text-dark-green/40">Observações</h3>
                             </div>
-                            <textarea className="w-full h-32 p-4 rounded-xl border border-accent-sage/20 bg-white md:bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent text-dark-green placeholder:text-dark-green/30 resize-none font-medium transition-all" placeholder="Ex: Retirar azeitonas, caprichar no molho..."></textarea>
+                            <textarea
+                                value={notes}
+                                onChange={(e) => setNotes(e.target.value)}
+                                className="w-full h-32 p-4 rounded-xl border border-accent-sage/20 bg-white md:bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent text-dark-green placeholder:text-dark-green/30 resize-none font-medium transition-all"
+                                placeholder="Ex: Retirar azeitonas, caprichar no molho..."
+                            ></textarea>
                         </div>
 
                     </div>
@@ -113,7 +131,7 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
                                 <span className="w-12 text-center font-bold text-dark-green text-xl">{qty}</span>
                                 <button onClick={() => setQty(qty + 1)} className="w-12 h-12 flex items-center justify-center rounded-lg bg-primary text-white shadow-sm hover:brightness-110 transition-all"><Plus size={20} /></button>
                             </div>
-                            <button onClick={() => onAddToCart(product, qty)} className="flex-1 h-14 md:h-16 bg-dark-green hover:bg-dark-green/90 text-white font-bold text-lg rounded-xl shadow-lg shadow-dark-green/20 flex items-center justify-center gap-3 active:scale-[0.98] transition-all">
+                            <button onClick={() => onAddToCart(product, qty, notes)} className="flex-1 h-14 md:h-16 bg-dark-green hover:bg-dark-green/90 text-white font-bold text-lg rounded-xl shadow-lg shadow-dark-green/20 flex items-center justify-center gap-3 active:scale-[0.98] transition-all">
                                 <ShoppingBag size={22} />
                                 <span>Adicionar à Cesta</span>
                             </button>

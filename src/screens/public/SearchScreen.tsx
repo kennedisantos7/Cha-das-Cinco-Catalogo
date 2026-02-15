@@ -52,9 +52,9 @@ export const SearchScreen = ({
                                         {onFavoriteToggle && (
                                             <button
                                                 onClick={(e) => { e.stopPropagation(); onFavoriteToggle(p.id); }}
-                                                className={`absolute top-2 right-2 w-8 h-8 backdrop-blur-md rounded-full flex items-center justify-center shadow-sm transition-all hover:scale-110 ${isFav ? 'bg-accent-pink text-bordeaux' : 'bg-white/80 text-primary'}`}
+                                                className={`absolute top-2 right-2 w-11 h-11 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-all ${isFav ? 'bg-accent-pink text-bordeaux' : 'bg-white/80 text-primary'}`}
                                             >
-                                                <Heart size={16} fill={isFav ? "currentColor" : "none"} />
+                                                <Heart size={22} fill={isFav ? "currentColor" : "none"} />
                                             </button>
                                         )}
                                     </div>
