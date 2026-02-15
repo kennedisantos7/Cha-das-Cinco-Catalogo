@@ -86,16 +86,26 @@ const AppContent = () => {
         // Optimistic update
         setFavorites(prev => isFavorited ? prev.filter(fid => id !== fid) : [...prev, id]);
 
+        let error;
         if (isFavorited) {
-            await supabase
+            const { error: delError } = await supabase
                 .from('user_favorites')
                 .delete()
                 .eq('user_id', session.user.id)
                 .eq('product_id', id);
+            error = delError;
         } else {
-            await supabase
+            const { error: insError } = await supabase
                 .from('user_favorites')
                 .insert({ user_id: session.user.id, product_id: id });
+            error = insError;
+        }
+
+        if (error) {
+            console.error("Error updating favorite:", error);
+            // Rollback optimistic update on error
+            setFavorites(prev => isFavorited ? [...prev, id] : prev.filter(fid => id !== fid));
+            alert("Erro ao salvar favorito. Certifique-se de que os produtos foram carregados corretamente.");
         }
     };
 

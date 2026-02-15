@@ -39,7 +39,7 @@ export const OrdersScreen = ({ onBack, onAddToCart }: { onBack: () => void, onAd
         switch (status.toLowerCase()) {
             case 'entregue': return { color: 'text-green-600 bg-green-100', icon: <CheckCircle size={16} />, label: 'Entregue' };
             case 'cancelado': return { color: 'text-red-600 bg-red-100', icon: <XCircle size={16} />, label: 'Cancelado' };
-            default: return { color: 'text-yellow-600 bg-yellow-100', icon: <Clock size={16} />, label: 'Em Preparo' };
+            default: return { color: 'text-primary bg-primary/10', icon: <Clock size={16} />, label: 'FINALIZADO POR WHATSAPP' };
         }
     };
 
