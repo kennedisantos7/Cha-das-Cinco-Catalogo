@@ -12,8 +12,34 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
     const [qty, setQty] = useState(1);
     const [notes, setNotes] = useState('');
     const [selectedImageIdx, setSelectedImageIdx] = useState(0);
+    const [touchStart, setTouchStart] = useState<number | null>(null);
+    const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
     const isFav = favorites.includes(product.id);
     const productImages = product.images && product.images.length > 0 ? product.images : [product.image];
+
+    // Swipe logic
+    const minSwipeDistance = 50;
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        setTouchEnd(null);
+        setTouchStart(e.targetTouches[0].clientX);
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX);
+
+    const handleTouchEnd = () => {
+        if (!touchStart || !touchEnd) return;
+        const distance = touchStart - touchEnd;
+        const isLeftSwipe = distance > minSwipeDistance;
+        const isRightSwipe = distance < -minSwipeDistance;
+
+        if (isLeftSwipe) {
+            setSelectedImageIdx((prev) => (prev + 1) % productImages.length);
+        } else if (isRightSwipe) {
+            setSelectedImageIdx((prev) => (prev - 1 + productImages.length) % productImages.length);
+        }
+    };
 
     return (
         <div className="flex flex-col h-full bg-background-cream md:bg-gray-50/50 md:flex-row md:items-center md:justify-center md:pt-28 md:p-10 animate-fade-in">
@@ -36,7 +62,12 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
 
                 {/* Image Section */}
                 <div className="relative w-full md:w-1/2 flex flex-col bg-gray-100">
-                    <div className="relative w-full aspect-square md:aspect-auto md:flex-1 overflow-hidden group">
+                    <div
+                        className="relative w-full aspect-square md:aspect-auto md:flex-1 overflow-hidden group touch-pan-y"
+                        onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
+                        onTouchEnd={handleTouchEnd}
+                    >
                         <img
                             src={productImages[selectedImageIdx]}
                             alt={product.name}
@@ -124,15 +155,15 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
                     </div>
 
                     {/* Bottom Action Bar */}
-                    <div className="md:relative fixed bottom-0 w-full p-6 bg-white/95 md:bg-white ios-blur border-t border-dark-green/5 z-[60] md:z-auto rounded-t-[2rem] md:rounded-none shadow-[0_-10px_30px_rgba(0,0,0,0.05)] md:shadow-none">
-                        <div className="flex items-center gap-4 md:gap-8 max-w-4xl mx-auto">
-                            <div className="flex items-center bg-gray-100/80 p-1.5 rounded-2xl border border-accent-sage/10">
-                                <button onClick={() => setQty(Math.max(1, qty - 1))} className="w-11 h-11 flex items-center justify-center rounded-xl bg-white text-dark-green shadow-sm hover:shadow-md active:scale-90 transition-all"><Minus size={18} /></button>
-                                <span className="w-10 text-center font-extrabold text-dark-green text-xl">{qty}</span>
-                                <button onClick={() => setQty(qty + 1)} className="w-11 h-11 flex items-center justify-center rounded-xl bg-primary text-white shadow-lg shadow-primary/20 hover:brightness-110 active:scale-90 transition-all"><Plus size={18} /></button>
+                    <div className="md:relative fixed bottom-0 w-full p-4 md:p-6 bg-white/95 md:bg-white ios-blur border-t border-dark-green/5 z-[60] md:z-auto rounded-t-[2rem] md:rounded-none shadow-[0_-10px_30px_rgba(0,0,0,0.05)] md:shadow-none">
+                        <div className="flex items-center gap-3 md:gap-8 max-w-4xl mx-auto">
+                            <div className="flex items-center bg-gray-100/80 p-1 rounded-xl border border-accent-sage/10">
+                                <button onClick={() => setQty(Math.max(1, qty - 1))} className="w-9 h-9 md:w-11 md:h-11 flex items-center justify-center rounded-lg bg-white text-dark-green shadow-sm hover:shadow-md active:scale-90 transition-all"><Minus size={16} /></button>
+                                <span className="w-8 text-center font-extrabold text-dark-green text-lg md:text-xl">{qty}</span>
+                                <button onClick={() => setQty(qty + 1)} className="w-9 h-9 md:w-11 md:h-11 flex items-center justify-center rounded-lg bg-primary text-white shadow-lg shadow-primary/20 hover:brightness-110 active:scale-90 transition-all"><Plus size={16} /></button>
                             </div>
-                            <button onClick={() => onAddToCart(product, qty, notes)} className="flex-1 h-14 md:h-16 bg-dark-green hover:bg-dark-green/90 text-white font-bold text-lg rounded-2xl shadow-xl shadow-dark-green/20 flex items-center justify-center gap-3 active:scale-[0.97] transition-all group">
-                                <ShoppingBag size={22} className="group-hover:scale-110 transition-transform" />
+                            <button onClick={() => onAddToCart(product, qty, notes)} className="flex-1 h-12 md:h-16 bg-dark-green hover:bg-dark-green/90 text-white font-bold text-base md:text-lg rounded-xl shadow-xl shadow-dark-green/20 flex items-center justify-center gap-2 md:gap-3 active:scale-[0.97] transition-all group">
+                                <ShoppingBag size={20} className="group-hover:scale-110 transition-transform" />
                                 <span>Adicionar à Cesta</span>
                             </button>
                         </div>

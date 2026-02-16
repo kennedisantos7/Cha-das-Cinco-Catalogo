@@ -23,13 +23,13 @@ export const HomeScreen = ({ products, featuredProduct, onItemClick, onSeeAll, o
 
     return (
         <div className="flex-1 w-full max-w-7xl mx-auto md:px-6 pt-2 md:pt-6 pb-32">
-            <div className="relative w-full md:h-[450px] h-[340px] bg-dark-green rounded-3xl overflow-hidden mb-10 group cursor-pointer shadow-2xl" onClick={() => onItemClick(featuredProduct)}>
-                <div className="absolute inset-0 flex items-end md:items-center p-8 md:p-16 z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent md:bg-gradient-to-r md:from-dark-green md:via-dark-green/40 md:to-transparent">
+            <div className="relative w-full md:h-[450px] h-[280px] bg-dark-green rounded-3xl overflow-hidden mb-10 group cursor-pointer shadow-2xl" onClick={() => onItemClick(featuredProduct)}>
+                <div className="absolute inset-0 flex items-center p-8 md:p-16 z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent md:bg-gradient-to-r md:from-dark-green md:via-dark-green/40 md:to-transparent">
                     <div className="max-w-full md:max-w-[60%] animate-slide-up">
                         <span className="text-xs md:text-sm font-bold uppercase tracking-[0.3em] text-accent-pink mb-3 block drop-shadow-md">Padaria Artesanal</span>
-                        <h2 className="text-3xl md:text-6xl font-black text-white leading-tight mb-6 drop-shadow-2xl">{featuredProduct.name}</h2>
+                        <h2 className="text-2xl md:text-6xl font-black text-white leading-tight mb-6 drop-shadow-2xl">{featuredProduct.name}</h2>
                         <button className="bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-primary/40 transition-all transform hover:scale-105 active:scale-95">
-                            Ver Coleção
+                            Ver Catálogo
                         </button>
                     </div>
                 </div>
