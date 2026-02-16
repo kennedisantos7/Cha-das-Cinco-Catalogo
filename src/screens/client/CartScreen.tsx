@@ -51,8 +51,7 @@ export const CartScreen = ({
                 name: i.name,
                 price: i.price,
                 quantity: i.quantity,
-                image: i.image,
-                notes: i.notes
+                image: i.image
             })),
             status: 'preparando'
         });
@@ -68,9 +67,7 @@ export const CartScreen = ({
         // 2. Redirect to WhatsApp
         const phoneNumber = '554499784736';
         const orderSummary = cart.map(i => {
-            let itemText = `• ${i.quantity}x ${i.name} (R$ ${i.price.toFixed(2)} un.)`;
-            if (i.notes) itemText += `\n   _Obs: ${i.notes}_`;
-            return itemText;
+            return `• ${i.quantity}x ${i.name} (R$ ${i.price.toFixed(2)} un.)`;
         }).join('\n');
 
         let message = `Olá! Gostaria de fazer um pedido:\n\n${orderSummary}\n\n*Total: R$ ${total.toFixed(2)}*`;
@@ -120,11 +117,6 @@ export const CartScreen = ({
                                                     <span className="font-bold text-primary whitespace-nowrap">R$ {(item.price * item.quantity).toFixed(2)}</span>
                                                 </div>
                                                 <p className="text-sm text-accent-sage font-medium mb-1">{item.category}</p>
-                                                {item.notes && (
-                                                    <p className="text-xs text-primary font-medium italic mb-2 px-2 py-1 bg-primary/5 rounded-lg inline-block line-clamp-1">
-                                                        Obs: {item.notes}
-                                                    </p>
-                                                )}
                                                 <div className="flex items-center justify-between">
                                                     <div className="text-xs text-gray-400 font-bold bg-white px-2 py-1 rounded border border-gray-100">
                                                         R$ {item.price.toFixed(2)} un.
@@ -243,4 +235,3 @@ export const CartScreen = ({
         </div>
     );
 };
-

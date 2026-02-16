@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { ChevronLeft, Heart, Share2, Edit3, Minus, Plus, ShoppingBag } from 'lucide-react';
+import { ChevronLeft, Heart, Share2, Minus, Plus, ShoppingBag } from 'lucide-react';
 import { Product } from '../../types/types';
 
-export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteToggle, favorites }: {
+export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteToggle, favorites, onSeeCatalog }: {
     product: Product,
     onBack: () => void,
-    onAddToCart: (p: Product, qty: number, notes?: string) => void,
+    onAddToCart: (p: Product, qty: number) => void,
     onFavoriteToggle: (id: string) => void,
-    favorites: string[]
+    favorites: string[],
+    onSeeCatalog?: () => void
 }) => {
     const [qty, setQty] = useState(1);
-    const [notes, setNotes] = useState('');
     const [selectedImageIdx, setSelectedImageIdx] = useState(0);
     const [touchStart, setTouchStart] = useState<number | null>(null);
     const [touchEnd, setTouchEnd] = useState<number | null>(null);
@@ -41,6 +41,26 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
         }
     };
 
+    const handleShare = async () => {
+        const shareUrl = `${window.location.origin}${window.location.pathname}?product=${product.id}`;
+        const shareData = {
+            title: product.name,
+            text: `Confira este produto no Chá das Cinco: ${product.name}`,
+            url: shareUrl
+        };
+
+        try {
+            if (navigator.share) {
+                await navigator.share(shareData);
+            } else {
+                await navigator.clipboard.writeText(shareUrl);
+                alert("Link do produto copiado com sucesso! Agora você pode colar no WhatsApp ou onde desejar.");
+            }
+        } catch (err) {
+            console.error('Error sharing:', err);
+        }
+    };
+
     return (
         <div className="flex flex-col h-full bg-background-cream md:bg-gray-50/50 md:flex-row md:items-center md:justify-center md:pt-28 md:p-10 animate-fade-in">
             {/* Mobile Layout Wrapper / Desktop Modal-like Card */}
@@ -54,7 +74,7 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
                         <button onClick={() => onFavoriteToggle(product.id)} className={`w-10 h-10 flex items-center justify-center bg-white/95 ios-blur rounded-full shadow-lg active:scale-90 transition-all ${isFav ? 'text-bordeaux' : 'text-accent-pink'}`}>
                             <Heart fill={isFav ? "currentColor" : "none"} size={22} />
                         </button>
-                        <button className="w-10 h-10 flex items-center justify-center bg-white/95 ios-blur rounded-full shadow-lg text-dark-green active:scale-90 transition-all">
+                        <button onClick={handleShare} className="w-10 h-10 flex items-center justify-center bg-white/95 ios-blur rounded-full shadow-lg text-dark-green active:scale-90 transition-all">
                             <Share2 size={22} />
                         </button>
                     </div>
@@ -104,8 +124,8 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
                 </div>
 
                 {/* Details Section */}
-                <div className="flex-1 flex flex-col bg-background-cream md:bg-white relative rounded-t-[2.5rem] md:rounded-none -mt-4 md:mt-0 shadow-[0_-15px_40px_rgba(0,0,0,0.08)] md:shadow-none z-10 transition-all duration-500">
-                    <div className="flex-1 px-6 md:px-10 py-10 md:py-12 overflow-y-auto pb-40 md:pb-12 custom-scrollbar">
+                <div className="flex-1 flex flex-col bg-background-cream md:bg-white relative rounded-t-[2.5rem] md:rounded-none mt-2 md:mt-0 shadow-[0_-15px_40px_rgba(0,0,0,0.08)] md:shadow-none z-10 transition-all duration-500">
+                    <div className="flex-1 px-6 md:px-10 py-10 md:py-12 overflow-y-auto pb-28 md:pb-12 custom-scrollbar">
 
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-2">
@@ -120,7 +140,7 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
                                 <button onClick={() => onFavoriteToggle(product.id)} className={`w-12 h-12 flex items-center justify-center rounded-full border ${isFav ? 'bg-accent-pink border-accent-pink text-bordeaux' : 'border-gray-200 hover:bg-gray-50 text-gray-400'}`}>
                                     <Heart fill={isFav ? "currentColor" : "none"} size={22} />
                                 </button>
-                                <button className="w-12 h-12 flex items-center justify-center rounded-full border border-gray-200 hover:bg-gray-50 text-dark-green">
+                                <button onClick={handleShare} className="w-12 h-12 flex items-center justify-center rounded-full border border-gray-200 hover:bg-gray-50 text-dark-green">
                                     <Share2 size={22} />
                                 </button>
                             </div>
@@ -139,17 +159,18 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
                             <p className="text-dark-green leading-relaxed font-medium text-lg opacity-90">{product.description}</p>
                         </div>
 
-                        <div className="mb-8 md:mb-0">
-                            <div className="flex items-center gap-2 mb-4">
-                                <Edit3 size={18} className="text-primary" />
-                                <h3 className="text-sm font-bold uppercase tracking-widest text-dark-green/40">Observações</h3>
-                            </div>
-                            <textarea
-                                value={notes}
-                                onChange={(e) => setNotes(e.target.value)}
-                                className="w-full h-32 p-4 rounded-xl border border-accent-sage/20 bg-white md:bg-gray-50 focus:ring-2 focus:ring-primary focus:border-transparent text-dark-green placeholder:text-dark-green/30 resize-none font-medium transition-all"
-                                placeholder="Ex: Retirar azeitonas, caprichar no molho..."
-                            ></textarea>
+                        {/* Full Catalog Button - positioned at the bottom of the content */}
+                        <div className="mt-12 mb-6 flex flex-col items-center">
+                            <button
+                                onClick={onSeeCatalog}
+                                className="w-full py-4 px-6 border-2 border-primary/20 hover:border-primary text-primary font-bold rounded-2xl transition-all active:scale-95 bg-primary/5 hover:bg-primary/10 flex items-center justify-center gap-2"
+                            >
+                                <ShoppingBag size={20} />
+                                Ver Catálogo Completo
+                            </button>
+                            <p className="mt-4 text-xs text-dark-green/40 font-medium uppercase tracking-widest text-center">
+                                Gostaria de ver mais opções deliciosas?
+                            </p>
                         </div>
 
                     </div>
@@ -162,7 +183,7 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
                                 <span className="w-8 text-center font-extrabold text-dark-green text-lg md:text-xl">{qty}</span>
                                 <button onClick={() => setQty(qty + 1)} className="w-9 h-9 md:w-11 md:h-11 flex items-center justify-center rounded-lg bg-primary text-white shadow-lg shadow-primary/20 hover:brightness-110 active:scale-90 transition-all"><Plus size={16} /></button>
                             </div>
-                            <button onClick={() => onAddToCart(product, qty, notes)} className="flex-1 h-12 md:h-16 bg-dark-green hover:bg-dark-green/90 text-white font-bold text-base md:text-lg rounded-xl shadow-xl shadow-dark-green/20 flex items-center justify-center gap-2 md:gap-3 active:scale-[0.97] transition-all group">
+                            <button onClick={() => onAddToCart(product, qty)} className="flex-1 h-12 md:h-16 bg-dark-green hover:bg-dark-green/90 text-white font-bold text-base md:text-lg rounded-xl shadow-xl shadow-dark-green/20 flex items-center justify-center gap-2 md:gap-3 active:scale-[0.97] transition-all group">
                                 <ShoppingBag size={20} className="group-hover:scale-110 transition-transform" />
                                 <span>Adicionar à Cesta</span>
                             </button>
