@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, SlidersHorizontal, Plus, X, Heart } from 'lucide-react';
+import { Search, Plus, Heart } from 'lucide-react';
 import { ProductCategory, Product } from '../../types/types';
 
 export const SearchScreen = ({
@@ -102,7 +102,5 @@ export const SearchScreen = ({
                     </div>
                 </main>
             </div>
-        </div>
-        </div >
-    );
+            );
 };

@@ -84,3 +84,4 @@ export const HomeScreen = ({ products, onItemClick, onSeeAll, onFavoriteToggle, 
             </div>
         </div>
     );
+};
