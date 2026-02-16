@@ -153,7 +153,7 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
 
                         <div className="mb-8">
                             <h3 className="text-sm font-bold uppercase tracking-widest text-dark-green/40 mb-3">Descrição</h3>
-                            <p className="text-dark-green leading-relaxed font-medium text-lg opacity-90">{product.description}</p>
+                            <p className="text-dark-green leading-relaxed font-medium text-lg opacity-90 whitespace-pre-wrap">{product.description}</p>
                         </div>
 
                         {/* Full Catalog Button - positioned at the bottom of the content */}
