@@ -34,7 +34,7 @@ export const ProfileScreen = ({ isLoggedIn, onLoginClick, onLogout, onOrdersClic
                     <div className="h-32 bg-primary/10 w-full relative">
                         <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 md:left-10 md:translate-x-0">
                             <div className="w-32 h-32 rounded-full border-4 border-white bg-white shadow-lg overflow-hidden">
-                                <img src={user.user_metadata?.avatar_url || "https://lh3.googleusercontent.com/aida-public/AB6AXuCJZ9LPPKoMwWduMbPAaemL7dB1orifC6wOA56CVMtaLGY5hQGUc4EzUOzHLjjVF58f-oH0r7ZTyaQo0xi_metM6ZfdxKZQ1Lk7-adWM_dCAcW6y0bKLn4J011ufPwX9KfUFtmgG8aOv8C0pQgEeqPRdL3lL-uHP5wl9DGNyu97Qah9kdnT54-x2DWGbSGOnC3JFaplC2fw0tiP97Lv5QPnXICi2XrPDu4SAm2vQOKx0BbzI0qmFUloZ6o1b4TiRdtPk8nKbqsU0rhg"} alt="Profile" className="w-full h-full object-cover" />
+                                <img src="https://i.imgur.com/7IWm3ih.png" alt="Logo" className="w-full h-full object-contain p-4" />
                             </div>
                         </div>
                     </div>
@@ -47,19 +47,19 @@ export const ProfileScreen = ({ isLoggedIn, onLoginClick, onLogout, onOrdersClic
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-gray-100 border-t border-gray-100">
-                        {['Meus Pedidos', 'Endereços', 'Favoritos', 'Configurações'].map((item, i) => (
+                        {['Meus Pedidos', 'Favoritos', 'Configurações'].map((item, i) => (
                             <div
                                 key={item}
                                 onClick={() => {
                                     if (i === 0) onOrdersClick();
-                                    if (i === 2) onFavoritesClick();
-                                    if (i === 3) onSettingsClick();
+                                    if (i === 1) onFavoritesClick();
+                                    if (i === 2) onSettingsClick();
                                 }}
                                 className="bg-white p-6 flex items-center justify-between group cursor-pointer hover:bg-gray-50 transition-colors"
                             >
                                 <div className="flex items-center gap-4">
                                     <div className="w-12 h-12 rounded-xl bg-gray-50 group-hover:bg-white group-hover:shadow-sm flex items-center justify-center text-primary transition-all">
-                                        {i === 0 ? <Receipt size={22} /> : i === 1 ? <Compass size={22} /> : i === 2 ? <Heart size={22} /> : <Settings size={22} />}
+                                        {i === 0 ? <Receipt size={22} /> : i === 1 ? <Heart size={22} /> : <Settings size={22} />}
                                     </div>
                                     <span className="font-bold text-dark-green text-lg">{item}</span>
                                 </div>
