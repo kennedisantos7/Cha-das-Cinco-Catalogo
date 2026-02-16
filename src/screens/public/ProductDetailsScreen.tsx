@@ -21,15 +21,15 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
             <div className="flex flex-col h-full md:h-auto md:max-h-[85vh] md:w-full md:max-w-6xl md:bg-white md:rounded-3xl md:shadow-2xl md:overflow-hidden md:flex-row relative">
 
                 <div className="md:hidden absolute top-8 left-6 right-6 flex justify-between z-20">
-                    <button onClick={onBack} className="w-12 h-12 flex items-center justify-center bg-white/95 ios-blur rounded-full shadow-xl text-dark-green active:scale-90 transition-all">
-                        <ChevronLeft size={28} />
+                    <button onClick={onBack} className="w-10 h-10 flex items-center justify-center bg-white/95 ios-blur rounded-full shadow-lg text-dark-green active:scale-90 transition-all">
+                        <ChevronLeft size={24} />
                     </button>
-                    <div className="flex gap-4">
-                        <button onClick={() => onFavoriteToggle(product.id)} className={`w-12 h-12 flex items-center justify-center bg-white/95 ios-blur rounded-full shadow-xl active:scale-90 transition-all ${isFav ? 'text-bordeaux' : 'text-accent-pink'}`}>
-                            <Heart fill={isFav ? "currentColor" : "none"} size={26} />
+                    <div className="flex gap-3">
+                        <button onClick={() => onFavoriteToggle(product.id)} className={`w-10 h-10 flex items-center justify-center bg-white/95 ios-blur rounded-full shadow-lg active:scale-90 transition-all ${isFav ? 'text-bordeaux' : 'text-accent-pink'}`}>
+                            <Heart fill={isFav ? "currentColor" : "none"} size={22} />
                         </button>
-                        <button className="w-12 h-12 flex items-center justify-center bg-white/95 ios-blur rounded-full shadow-xl text-dark-green active:scale-90 transition-all">
-                            <Share2 size={26} />
+                        <button className="w-10 h-10 flex items-center justify-center bg-white/95 ios-blur rounded-full shadow-lg text-dark-green active:scale-90 transition-all">
+                            <Share2 size={22} />
                         </button>
                     </div>
                 </div>
@@ -73,7 +73,7 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
                 </div>
 
                 {/* Details Section */}
-                <div className="flex-1 flex flex-col bg-background-cream md:bg-white relative rounded-t-[2.5rem] md:rounded-none -mt-10 md:mt-0 shadow-[0_-15px_40px_rgba(0,0,0,0.08)] md:shadow-none z-10 transition-all duration-500">
+                <div className="flex-1 flex flex-col bg-background-cream md:bg-white relative rounded-t-[2.5rem] md:rounded-none -mt-4 md:mt-0 shadow-[0_-15px_40px_rgba(0,0,0,0.08)] md:shadow-none z-10 transition-all duration-500">
                     <div className="flex-1 px-6 md:px-10 py-10 md:py-12 overflow-y-auto pb-40 md:pb-12 custom-scrollbar">
 
                         <div className="flex items-center justify-between mb-4">

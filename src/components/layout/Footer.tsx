@@ -1,5 +1,5 @@
 import React from 'react';
-import { Instagram, Facebook, Mail } from 'lucide-react';
+import { Instagram, Facebook } from 'lucide-react';
 
 export const Footer = () => {
     return (
@@ -28,15 +28,11 @@ export const Footer = () => {
                 {/* Contact & Social */}
                 <div className="flex flex-col gap-4 items-center md:items-start">
                     <h3 className="font-bold text-lg text-accent-sage">Contato</h3>
-                    <p className="text-sm flex items-center gap-2">
-                        <Mail size={16} />
-                        contato@chadascinco.com
-                    </p>
                     <div className="flex gap-4 mt-2">
-                        <a href="#" className="p-2 bg-white/10 rounded-full hover:bg-primary transition-colors">
+                        <a href="https://www.instagram.com/chadascinco_oficial/" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/10 rounded-full hover:bg-primary transition-colors">
                             <Instagram size={20} />
                         </a>
-                        <a href="#" className="p-2 bg-white/10 rounded-full hover:bg-primary transition-colors">
+                        <a href="https://www.facebook.com/chadascincomaringa" target="_blank" rel="noopener noreferrer" className="p-2 bg-white/10 rounded-full hover:bg-primary transition-colors">
                             <Facebook size={20} />
                         </a>
                     </div>

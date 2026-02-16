@@ -22,18 +22,18 @@ export const HomeScreen = ({ products, featuredProduct, onItemClick, onSeeAll, o
     const categories: ProductCategory[] = ['PÃES TRADICIONAIS', 'PÃES SEM GLÚTEN', 'DOCES', 'SALGADOS'];
 
     return (
-        <div className="flex-1 w-full max-w-7xl mx-auto md:px-6 py-6 pb-32">
-            <div className="relative w-full md:h-[400px] h-[300px] bg-accent-pink rounded-3xl overflow-hidden mb-8 group cursor-pointer shadow-lg" onClick={() => onItemClick(featuredProduct)}>
-                <div className="absolute inset-0 flex items-center p-8 md:p-12 z-10 bg-gradient-to-r from-accent-pink/90 to-transparent">
-                    <div className="max-w-[80%] md:max-w-[50%] animate-slide-up">
-                        <span className="text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-primary mb-3 block">Padaria Artesanal</span>
-                        <h2 className="text-3xl md:text-5xl font-extrabold text-dark-green leading-tight mb-4 drop-shadow-sm">{featuredProduct.name}</h2>
-                        <button className="bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-full text-sm font-bold shadow-lg shadow-primary/20 transition-all transform hover:scale-105">
+        <div className="flex-1 w-full max-w-7xl mx-auto md:px-6 pt-2 md:pt-6 pb-32">
+            <div className="relative w-full md:h-[450px] h-[340px] bg-dark-green rounded-3xl overflow-hidden mb-10 group cursor-pointer shadow-2xl" onClick={() => onItemClick(featuredProduct)}>
+                <div className="absolute inset-0 flex items-end md:items-center p-8 md:p-16 z-10 bg-gradient-to-t from-black/80 via-black/20 to-transparent md:bg-gradient-to-r md:from-dark-green md:via-dark-green/40 md:to-transparent">
+                    <div className="max-w-full md:max-w-[60%] animate-slide-up">
+                        <span className="text-xs md:text-sm font-bold uppercase tracking-[0.3em] text-accent-pink mb-3 block drop-shadow-md">Padaria Artesanal</span>
+                        <h2 className="text-3xl md:text-6xl font-black text-white leading-tight mb-6 drop-shadow-2xl">{featuredProduct.name}</h2>
+                        <button className="bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-2xl text-base font-bold shadow-2xl shadow-primary/40 transition-all transform hover:scale-105 active:scale-95">
                             Ver Coleção
                         </button>
                     </div>
                 </div>
-                <img src={featuredProduct.image} className="absolute right-0 top-0 h-full w-full md:w-2/3 object-cover opacity-90 group-hover:scale-105 transition-transform duration-1000" alt="Hero" />
+                <img src={featuredProduct.image} className="absolute inset-0 h-full w-full object-cover opacity-70 md:opacity-90 group-hover:scale-110 transition-transform duration-1000" alt="Hero" />
             </div>
 
             <div className="mb-10">
