@@ -33,36 +33,34 @@ export const CartScreen = ({
     );
 
     const handleCheckout = async () => {
-        if (!user) {
-            alert("Por favor, faça login para finalizar o pedido.");
-            return;
-        }
-
         if (cart.length === 0) return;
 
         setLoading(true);
 
-        // 1. Save to Supabase
-        const { error } = await supabase.from('orders').insert({
-            user_id: user.id,
-            total: total,
-            items: cart.map(i => ({
-                id: i.id,
-                name: i.name,
-                price: i.price,
-                quantity: i.quantity,
-                image: i.image
-            })),
-            status: 'preparando'
-        });
+        const isGuest = !user;
+
+        if (!isGuest) {
+            // 1. Save to Supabase (Only for logged in users)
+            const { error } = await supabase.from('orders').insert({
+                user_id: user.id,
+                total: total,
+                items: cart.map(i => ({
+                    id: i.id,
+                    name: i.name,
+                    price: i.price,
+                    quantity: i.quantity,
+                    image: i.image
+                })),
+                status: 'preparando'
+            });
+
+            if (error) {
+                console.error("Error saving order:", error);
+                alert("Houve um erro ao salvar seu pedido no sistema. Vamos tentar prosseguir pelo WhatsApp.");
+            }
+        }
 
         setLoading(false);
-
-        if (error) {
-            console.error("Error saving order:", error);
-            alert("Houve um erro ao salvar seu pedido. Tente novamente.");
-            return;
-        }
 
         // 2. Redirect to WhatsApp
         const phoneNumber = '554499784736';
@@ -74,6 +72,10 @@ export const CartScreen = ({
 
         if (orderNotes.trim()) {
             message += `\n\n*Observações Gerais:*\n${orderNotes}`;
+        }
+
+        if (isGuest) {
+            message += `\n\n_📌 Pedido de Visitante (Sem login)_`;
         }
 
         message += `\n\n_Pedido gerado pelo Catálogo Chá das Cinco_`;

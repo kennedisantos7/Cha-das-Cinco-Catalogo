@@ -1,4 +1,4 @@
-export type ProductCategory = 'PÃES TRADICIONAIS' | 'PÃES SEM GLÚTEN' | 'DOCES' | 'SALGADOS';
+export type ProductCategory = 'SEM GLÚTEN' | 'SEM GLÚTEN INTEGRAL' | 'SEM GLÚTEN FOLHEADOS' | 'TRADICIONAIS' | 'LANCHINHOS' | 'SONHOS' | 'ESFIHA' | 'PAMONHAS' | 'KIT';
 
 export interface Product {
   id: string;

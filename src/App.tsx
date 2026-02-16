@@ -31,62 +31,83 @@ const AppContent = () => {
     const [cart, setCart] = useState<CartItem[]>([]);
     const [favorites, setFavorites] = useState<string[]>([]);
     const [products, setProducts] = useState<Product[]>(initialProducts);
+    const [productsLoading, setProductsLoading] = useState(true);
     const [featuredProduct, setFeaturedProduct] = useState<Product>(() => {
         return initialProducts[Math.floor(Math.random() * initialProducts.length)];
     });
 
     // Auth from Context
-    const { session, loading, signOut } = useAuth();
+    const { session, loading: authLoading, signOut } = useAuth();
     const isLoggedIn = !!session;
 
     useEffect(() => {
         const fetchData = async () => {
-            // Fetch Products
-            const { data: prodData } = await supabase.from('products').select('*');
-            if (prodData && prodData.length > 0) {
-                const mappedData = prodData.map((item: any) => {
-                    const images = item.images && item.images.length > 0 ? item.images : [item.image_url || item.image];
-                    return {
-                        ...item,
-                        images,
-                        image: images[0]
-                    };
-                });
-                setProducts(mappedData);
+            try {
+                // Fetch Products
+                const { data: prodData } = await supabase.from('products').select('*');
+                if (prodData && prodData.length > 0) {
+                    const mappedData = prodData.map((item: any) => {
+                        const images = item.images && item.images.length > 0 ? item.images : [item.image_url || item.image];
+                        return {
+                            ...item,
+                            images,
+                            image: images[0]
+                        };
+                    });
+                    setProducts(mappedData);
 
-                // Check for deep link (?product=id)
-                const params = new URLSearchParams(window.location.search);
-                const productId = params.get('product');
-                if (productId) {
-                    const sharedProduct = mappedData.find((p: Product) => p.id === productId);
-                    if (sharedProduct) {
-                        setSelectedProduct(sharedProduct);
-                        setActiveScreen('product-details');
-                        // Clean URL without reloading
-                        const newUrl = window.location.pathname;
-                        window.history.replaceState({}, '', newUrl);
+                    // Check for deep link (?product=id)
+                    const params = new URLSearchParams(window.location.search);
+                    const productId = params.get('product');
+                    if (productId) {
+                        const sharedProduct = mappedData.find((p: Product) => p.id === productId);
+                        if (sharedProduct) {
+                            setSelectedProduct(sharedProduct);
+                            setActiveScreen('product-details');
+                            // Clean URL without reloading
+                            const newUrl = window.location.pathname;
+                            window.history.replaceState({}, '', newUrl);
+                        }
+                    }
+
+                    // Pre-select and pre-load banner image
+                    let featured = featuredProduct;
+                    const found = mappedData.find((p: Product) => p.id === featuredProduct.id);
+                    if (found) {
+                        featured = found;
+                    } else {
+                        featured = mappedData[Math.floor(Math.random() * mappedData.length)];
+                    }
+                    setFeaturedProduct(featured);
+
+                    // Preload major image
+                    if (featured.image) {
+                        const img = new Image();
+                        img.src = featured.image;
+                        await new Promise((resolve) => {
+                            img.onload = () => setTimeout(resolve, 100);
+                            img.onerror = resolve; // Continue even on error to not block app
+                        });
                     }
                 }
 
-                // Update featured product data if found in live products
-                setFeaturedProduct(prev => {
-                    const found = mappedData.find((p: Product) => p.id === prev.id);
-                    return found || prev;
-                });
-            }
+                // Fetch Favorites if logged in
+                if (session?.user?.id) {
+                    const { data: favData } = await supabase
+                        .from('user_favorites')
+                        .select('product_id')
+                        .eq('user_id', session.user.id);
 
-            // Fetch Favorites if logged in
-            if (session?.user?.id) {
-                const { data: favData } = await supabase
-                    .from('user_favorites')
-                    .select('product_id')
-                    .eq('user_id', session.user.id);
-
-                if (favData) {
-                    setFavorites(favData.map(f => f.product_id));
+                    if (favData) {
+                        setFavorites(favData.map(f => f.product_id));
+                    }
+                } else {
+                    setFavorites([]);
                 }
-            } else {
-                setFavorites([]);
+            } catch (err) {
+                console.error("Error fetching data:", err);
+            } finally {
+                setProductsLoading(false);
             }
         };
         fetchData();
@@ -147,11 +168,8 @@ const AppContent = () => {
     };
 
     const renderScreen = () => {
-        // Force Login/Register if not logged in
-        if (!isLoggedIn) {
-            if (activeScreen === 'register') {
-                return <RegisterScreen onBack={() => setActiveScreen('login')} onRegister={() => setActiveScreen('login')} />;
-            }
+        // Special case: Favorites and Orders require login
+        if (!isLoggedIn && (activeScreen === 'favorites' || activeScreen === 'orders')) {
             return <LoginScreen onLogin={() => setActiveScreen('home')} onRegister={() => setActiveScreen('register')} />;
         }
 
@@ -170,7 +188,7 @@ const AppContent = () => {
         }
     };
 
-    if (loading) {
+    if (authLoading || productsLoading) {
         return (
             <div className="flex flex-col h-screen items-center justify-center bg-background-cream gap-4">
                 <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
@@ -179,7 +197,7 @@ const AppContent = () => {
         );
     }
 
-    const isAuthScreen = !isLoggedIn || activeScreen === 'login' || activeScreen === 'register';
+    const isAuthScreen = activeScreen === 'login' || activeScreen === 'register';
     const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
 
     return (

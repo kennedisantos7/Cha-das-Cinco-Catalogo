@@ -1,4 +1,4 @@
-import { Product, Order, Customer } from './types';
+import { Product, Order, Customer } from '../types/types';
 
 export const products: Product[] = [
   {
@@ -7,79 +7,87 @@ export const products: Product[] = [
     description: 'Pão rústico de fermentação natural recém-assado, com crosta crocante e miolo macio e aerado.',
     price: 12.00,
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB9FtpTO0rA23tCJ6tpbUYPBk8gcubkmty7BB4i3dmiivLT0zrHv4hcRrd0w17s9cCwC3DxpPVhqcNDLqwjODDoLa1fRvJCjnjh9fFZd-Zci7qW6sbmm9OEagv6zOeyy2ch7CwGHuI36cg9eYpT82ZBXvLvJVn0PupvxDSySu1iPD2v4HLcz3vk3rGC50plNGVDmUcQDySnZsfukS6EFRQeiPob-2SNkLK5rSJHdHrWvHg80mvxChLiGrahM8ryJJZNfvwkkLQIaEQI',
-    category: 'Pães',
+    category: 'SEM GLÚTEN',
     stock: 24,
-    unit: 'Pão'
+    unit: 'Pão',
+    images: ['https://lh3.googleusercontent.com/aida-public/AB6AXuB9FtpTO0rA23tCJ6tpbUYPBk8gcubkmty7BB4i3dmiivLT0zrHv4hcRrd0w17s9cCwC3DxpPVhqcNDLqwjODDoLa1fRvJCjnjh9fFZd-Zci7qW6sbmm9OEagv6zOeyy2ch7CwGHuI36cg9eYpT82ZBXvLvJVn0PupvxDSySu1iPD2v4HLcz3vk3rGC50plNGVDmUcQDySnZsfukS6EFRQeiPob-2SNkLK5rSJHdHrWvHg80mvxChLiGrahM8ryJJZNfvwkkLQIaEQI']
   },
   {
     id: '2',
-    name: 'Croissant Clássico',
-    description: 'Croissant francês amanteigado e folhado, assado fresco todas as manhãs.',
-    price: 4.50,
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAa4z29QVmwZ7bvszVs9u1yTa6flvHrrz08AgKSEOrOObovWC5duilexxXsAkfREZqZI6cpNRpSr-8mGXR3mK01Cmd8I8jPxypQd4hHcfNg3hOKqDrKIPGWHE13wAL_aXcc3gEGi1ZLDyRZEzCxeE8znhkZ2Abymrp5Ixhz4-th3QudIRZQIS-qpv5prYsDFnh6Bi4ojwmiyeQgBmIV8pcXbrlnYHVf-NL1utpuevwxNEgwhYu8HKmJefRKExmby8NROu5LD7MvOgIS',
-    category: 'Folhados',
-    stock: 3,
-    unit: 'Unidade'
+    name: 'Baguete Artesanal',
+    description: 'Baguete crocante por fora e macia por dentro, ideal para sanduíches e antepastos.',
+    price: 8.50,
+    image: 'https://images.unsplash.com/photo-1586444248902-2f64eddf13da?w=800&auto=format&fit=crop&q=60',
+    category: 'TRADICIONAIS',
+    stock: 15,
+    unit: 'Unidade',
+    images: []
   },
   {
     id: '3',
-    name: 'Fatia de Ganache Meio Amargo',
-    description: 'Fatia de bolo de ganache de chocolate úmido feito com 70% de chocolate belga.',
-    price: 6.00,
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBE7zTFAkSdc96c_kNLicrCXnUqHPmRPB0QkcYPlNKOda4EVUorqNDBMNXvcxtFPILYtUQX6nHIXmg_ioRNz1coPIU3jCtf5ipmyhvqo072RiKvORJ8mYujQYAuC3moZQDiPjGq5Iz971OC14H4sMmfgyO9MNnMlV7eKXXeriD_2xtwn0FFYedDbZOWUQX2gz8PGgz7cY3-26jgAGBnKyqFMuUuOLTmUEzTFiIW_6mVmxSWK15hDZDtxf0o3ZaQScl6N8Z8iBjB0GP7',
-    category: 'Bolos',
+    name: 'Croissant Recheado',
+    description: 'Massa folhada amanteigada com recheio cremoso de chocolate belga.',
+    price: 9.90,
+    image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=800&auto=format&fit=crop&q=60',
+    category: 'SEM GLÚTEN FOLHEADOS',
     stock: 12,
-    unit: 'Fatia'
+    unit: 'Unidade',
+    images: []
   },
   {
     id: '4',
-    name: 'Pão Multigrãos da Fazenda',
-    description: 'Pão artesanal integral repleto de sementes e nutrientes.',
-    price: 7.25,
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBWYBOqV0i95Nkss6SAqCpE4S78iEW0DUu6ztn5ylVgC48FpEMv-m4Evgn6CFQP8x_HIuainRMi4ricnjhyWdgxu8048hEWl3XhcI1qyeSG8_gEajbzgm4PKWTAcFW2mQT1NANrcrFi-Qc9WROjiVo-T1kHOzz_MiCOKxGDKOPb2px6ynC_OyRCOSv4YPvalHLe1LwrxgB3MJNseeJBZnPsclhyjPZRBkze6nVLR1jChX6cgi_cOWb8Z77Tqn5ZBAa7-S0BcWNA1XAd',
-    category: 'Pães',
-    stock: 15,
-    unit: 'Pão'
+    name: 'Combo Especial Café',
+    description: 'Kit completo para seu café da tarde com pães, bolos e frios selecionados.',
+    price: 45.00,
+    image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&auto=format&fit=crop&q=60',
+    category: 'KIT',
+    stock: 6,
+    unit: 'Kit',
+    images: []
   },
   {
     id: '5',
-    name: 'Chá English Breakfast',
-    description: 'Xícara fumegante de chá English Breakfast, perfeito para começar o dia.',
-    price: 3.50,
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBrWyZSfd77s9IFHspduPLohtnqyeEzsilFmXBYpF3MQYKW9BPubiIOmL0-DIkNQjOwpGMnFr5hLiQIbmDsGYkESOgmuksp2NXiOoLCj8YRONskfdyXvdgwWOVout6nXGJuzouZFVYMJGyFtXi_M8r2dWMaWgjt7LvaTkwOJkaO2JxIZAS3IQtRfLYWsddlCTqYT_2EZ0NedI4NFrHk39Ac4Hl_3mpVu8zAsQ3kzwZbIfcHfOK0oTafo3G5OIub4bKgqY74qzA-uq_4',
-    category: 'Chás',
-    stock: 100,
-    unit: 'Xícara'
+    name: 'Mix de Pães de Queijo',
+    description: 'Pão de queijo tradicional feito com queijo canastra meia cura, crocante por fora e puxa-puxa por dentro.',
+    price: 14.50,
+    image: 'https://images.unsplash.com/photo-1590080875515-8a3a8dc3605e?w=800&auto=format&fit=crop&q=60',
+    category: 'LANCHINHOS',
+    stock: 50,
+    unit: 'Porção',
+    images: []
   },
   {
     id: '6',
-    name: 'Bolo de Frutas Vermelhas',
-    description: 'Massa amanteigada leve e aerada, harmonizada com um recheio generoso de frutas vermelhas frescas.',
-    price: 85.00,
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDeRaG_0b5JNxr7mD_qPCitJBlIf5cspb-gxX5Fl2W09OayOXRpBj93OHB8u1dVsTfut8QvgZNefZ9FVRUq8YKWh4iDHq6jIg7v2EtiVlx-yrqVNDVGTN35b2q1LTHUUubKPpnK2GLGrt-ACAkAJd9VyfXXpKw8TlOWLrB4cglp162cWmiDMxQROJ55rKDwvqyJgZotyA4rPAJYyzClJHccBUy0Kf7K1zqXXEcT39xhoRafonVtOeD-tavRpFFVj9LPcNcIpOOOX21_',
-    category: 'Bolos',
-    stock: 5,
-    unit: 'Bolo Inteiro'
+    name: 'Esfiha de Carne',
+    description: 'Esfiha aberta tradicional com tempero sírio autêntico e massa leve.',
+    price: 6.50,
+    image: 'https://images.unsplash.com/photo-1628113310821-91a2d5961984?w=800&auto=format&fit=crop&q=60',
+    category: 'ESFIHA',
+    stock: 30,
+    unit: 'Unidade',
+    images: []
   },
   {
     id: '7',
-    name: 'Chá de Hibisco e Frutas',
-    description: 'Infusão Natural (500ml) refrescante e deliciosa.',
-    price: 14.50,
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCc-g3NNVlrgyU6Xm_fsRL5M-QukCTuijR5jZGNlNsOiGXUiQPGRvpt7wmzYjHY7UO4C2B1gxjmtyqaQtefijE29QcEQjG1MhJOYZkUWBlq1kiX81oHExsQ8xKOIgfKbiXK7QT09bpiPs4LK7sNja3ifGK-Tgr5xMdfIedE3E0eRQFNPZBWVJxzo-D8Yp0tgTFDaTrP2kOvumefpHW5zEr2LOlzWOi57Pl9CCUd8APAGYSOLGWypHZXph4bEJ7rYZsO8eRyKXy0X1eW',
-    category: 'Chás',
-    stock: 50,
-    unit: 'Garrafa'
+    name: 'Sonho de Doce de Leite',
+    description: 'Massa leve e fofinha recheada com doce de leite artesanal.',
+    price: 7.50,
+    image: 'https://images.unsplash.com/photo-1559598467-f8b76c8155d0?w=800&auto=format&fit=crop&q=60',
+    category: 'SONHOS',
+    stock: 18,
+    unit: 'Unidade',
+    images: []
   },
   {
     id: '8',
-    name: 'Muffin de Mirtilo',
-    description: 'Muffin fofinho repleto de mirtilos frescos e uma cobertura crocante de açúcar.',
-    price: 5.50,
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAa4z29QVmwZ7bvszVs9u1yTa6flvHrrz08AgKSEOrOObovWC5duilexxXsAkfREZqZI6cpNRpSr-8mGXR3mK01Cmd8I8jPxypQd4hHcfNg3hOKqDrKIPGWHE13wAL_aXcc3gEGi1ZLDyRZEzCxeE8znhkZ2Abymrp5Ixhz4-th3QudIRZQIS-qpv5prYsDFnh6Bi4ojwmiyeQgBmIV8pcXbrlnYHVf-NL1utpuevwxNEgwhYu8HKmJefRKExmby8NROu5LD7MvOgIS',
-    category: 'Bolos',
-    stock: 18,
-    unit: 'Unidade'
+    name: 'Pamonha Assada',
+    description: 'Pamonha de milho verde de verdade, assada na palha com queijo coalho.',
+    price: 12.00,
+    image: 'https://images.unsplash.com/photo-1625944525533-473f1a3d54e7?w=800&auto=format&fit=crop&q=60',
+    category: 'PAMONHAS',
+    stock: 10,
+    unit: 'Unidade',
+    images: []
   }
 ];
 
