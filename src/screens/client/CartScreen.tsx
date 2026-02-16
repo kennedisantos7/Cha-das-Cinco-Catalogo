@@ -63,7 +63,7 @@ export const CartScreen = ({
         setLoading(false);
 
         // 2. Redirect to WhatsApp
-        const phoneNumber = '554499784736';
+        const phoneNumber = '5544998996257';
         const orderSummary = cart.map(i => {
             return `• ${i.quantity}x ${i.name} (R$ ${i.price.toFixed(2)} un.)`;
         }).join('\n');
