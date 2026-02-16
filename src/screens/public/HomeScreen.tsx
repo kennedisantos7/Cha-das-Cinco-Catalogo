@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Heart, Plus } from 'lucide-react';
 import { Product, ProductCategory } from '../../types/types';
 
-export const HomeScreen = ({ products, onItemClick, onSeeAll, onFavoriteToggle, favorites, onAddToCart, onCategoryClick }: {
+export const HomeScreen = ({ products, featuredProduct, onItemClick, onSeeAll, onFavoriteToggle, favorites, onAddToCart, onCategoryClick }: {
     products: Product[],
+    featuredProduct: Product,
     onItemClick: (p: Product) => void,
     onSeeAll: () => void,
     onFavoriteToggle: (id: string) => void,
@@ -11,12 +12,14 @@ export const HomeScreen = ({ products, onItemClick, onSeeAll, onFavoriteToggle, 
     onAddToCart: (p: Product, q: number) => void,
     onCategoryClick: (cat: ProductCategory) => void
 }) => {
-    const featuredProduct = useMemo(() => {
-        if (!products || products.length === 0) return null;
-        return products[Math.floor(Math.random() * products.length)];
-    }, [products]);
+    const [localCategory, setLocalCategory] = useState<ProductCategory | 'Todos'>('Todos');
 
-    if (!featuredProduct) return null;
+    const filteredProducts = useMemo(() => {
+        if (localCategory === 'Todos') return products;
+        return products.filter(p => p.category === localCategory);
+    }, [products, localCategory]);
+
+    const categories: ProductCategory[] = ['PÃES TRADICIONAIS', 'PÃES SEM GLÚTEN', 'DOCES', 'SALGADOS'];
 
     return (
         <div className="flex-1 w-full max-w-7xl mx-auto md:px-6 py-6 pb-32">
@@ -36,24 +39,35 @@ export const HomeScreen = ({ products, onItemClick, onSeeAll, onFavoriteToggle, 
             <div className="mb-10">
                 <div className="flex items-center justify-between mb-6 px-4 md:px-0">
                     <h3 className="font-bold text-xl md:text-2xl text-dark-green">Categorias</h3>
-                    <button className="text-primary text-sm font-bold hover:underline" onClick={onSeeAll}>Ver Todas</button>
+                    <button className="text-primary text-sm font-bold hover:underline" onClick={() => { setLocalCategory('Todos'); onSeeAll(); }}>Ver Todas</button>
                 </div>
-                <div className="flex gap-4 overflow-x-auto hide-scrollbar pb-4 px-4 md:px-0">
-                    {(['PÃES TRADICIONAIS', 'PÃES SEM GLÚTEN', 'DOCES', 'SALGADOS'] as ProductCategory[]).map((cat, i) => (
-                        <button key={cat} onClick={() => onCategoryClick(cat)} className="flex flex-col items-center gap-3 min-w-[90px] group transition-all">
-                            <div className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center transition-all duration-300 ${i === 0 ? 'bg-primary text-white shadow-lg scale-105' : 'bg-white border border-accent-sage/20 text-accent-sage group-hover:border-primary/50 group-hover:text-primary group-hover:shadow-md'}`}>
-                                <span className="text-2xl md:text-3xl">{i === 0 ? '🥖' : i === 1 ? '🌾' : i === 2 ? '🍰' : '🥟'}</span>
-                            </div>
-                            <span className={`text-sm font-bold text-center leading-tight ${i === 0 ? 'text-dark-green' : 'text-accent-sage group-hover:text-dark-green'}`}>{cat}</span>
-                        </button>
-                    ))}
+                <div className="flex justify-between md:justify-start gap-2 md:gap-8 overflow-x-auto hide-scrollbar pb-4 px-4 md:px-0">
+                    {categories.map((cat, i) => {
+                        const isActive = localCategory === cat;
+                        return (
+                            <button
+                                key={cat}
+                                onClick={() => setLocalCategory(isActive ? 'Todos' : cat)}
+                                className="flex flex-col items-center gap-3 min-w-[85px] md:min-w-[100px] group transition-all"
+                            >
+                                <div className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center transition-all duration-300 ${isActive ? 'bg-primary text-white shadow-lg scale-105' : 'bg-white border border-accent-sage/20 text-accent-sage group-hover:border-primary/50 group-hover:text-primary group-hover:shadow-md'}`}>
+                                    <span className="text-2xl md:text-3xl">{cat === 'PÃES TRADICIONAIS' ? '🥖' : cat === 'PÃES SEM GLÚTEN' ? '🌾' : cat === 'DOCES' ? '🍰' : '🥟'}</span>
+                                </div>
+                                <span className={`text-[10px] md:text-xs font-bold text-center leading-tight uppercase tracking-wider block w-full px-1 ${isActive ? 'text-dark-green' : 'text-accent-sage group-hover:text-dark-green'}`}>
+                                    {cat}
+                                </span>
+                            </button>
+                        );
+                    })}
                 </div>
             </div>
 
             <div className="px-4 md:px-0">
-                <h3 className="font-bold text-xl md:text-2xl mb-6 text-dark-green">Recomendados para Você</h3>
+                <h3 className="font-bold text-xl md:text-2xl mb-6 text-dark-green">
+                    {localCategory === 'Todos' ? 'Recomendados para Você' : `Produtos em ${localCategory}`}
+                </h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                    {products.map(product => {
+                    {filteredProducts.map(product => {
                         const isFav = favorites.includes(product.id);
                         return (
                             <div key={product.id} className="bg-white border border-accent-sage/10 rounded-2xl p-3 md:p-4 shadow-sm flex flex-col group hover:shadow-xl hover:border-primary/20 transition-all duration-300 cursor-pointer">
