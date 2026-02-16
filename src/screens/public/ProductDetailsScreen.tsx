@@ -16,19 +16,19 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
     const productImages = product.images && product.images.length > 0 ? product.images : [product.image];
 
     return (
-        <div className="flex flex-col h-full bg-background-cream md:bg-gray-50/50 md:flex-row md:items-center md:justify-center md:p-10 animate-fade-in">
+        <div className="flex flex-col h-full bg-background-cream md:bg-gray-50/50 md:flex-row md:items-center md:justify-center md:pt-28 md:p-10 animate-fade-in">
             {/* Mobile Layout Wrapper / Desktop Modal-like Card */}
             <div className="flex flex-col h-full md:h-auto md:max-h-[85vh] md:w-full md:max-w-6xl md:bg-white md:rounded-3xl md:shadow-2xl md:overflow-hidden md:flex-row relative">
 
-                <div className="md:hidden absolute top-6 left-6 right-6 flex justify-between z-20">
-                    <button onClick={onBack} className="w-12 h-12 flex items-center justify-center bg-white/90 backdrop-blur-md rounded-full shadow-lg text-dark-green active:scale-90 transition-all">
+                <div className="md:hidden absolute top-8 left-6 right-6 flex justify-between z-20">
+                    <button onClick={onBack} className="w-12 h-12 flex items-center justify-center bg-white/95 ios-blur rounded-full shadow-xl text-dark-green active:scale-90 transition-all">
                         <ChevronLeft size={28} />
                     </button>
                     <div className="flex gap-4">
-                        <button onClick={() => onFavoriteToggle(product.id)} className={`w-12 h-12 flex items-center justify-center bg-white/90 backdrop-blur-md rounded-full shadow-lg active:scale-90 transition-all ${isFav ? 'text-bordeaux' : 'text-accent-pink'}`}>
+                        <button onClick={() => onFavoriteToggle(product.id)} className={`w-12 h-12 flex items-center justify-center bg-white/95 ios-blur rounded-full shadow-xl active:scale-90 transition-all ${isFav ? 'text-bordeaux' : 'text-accent-pink'}`}>
                             <Heart fill={isFav ? "currentColor" : "none"} size={26} />
                         </button>
-                        <button className="w-12 h-12 flex items-center justify-center bg-white/90 backdrop-blur-md rounded-full shadow-lg text-dark-green active:scale-90 transition-all">
+                        <button className="w-12 h-12 flex items-center justify-center bg-white/95 ios-blur rounded-full shadow-xl text-dark-green active:scale-90 transition-all">
                             <Share2 size={26} />
                         </button>
                     </div>
@@ -73,8 +73,8 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
                 </div>
 
                 {/* Details Section */}
-                <div className="flex-1 flex flex-col bg-background-cream md:bg-white relative rounded-t-3xl md:rounded-none -mt-6 md:mt-0 shadow-[0_-10px_30px_rgba(0,0,0,0.05)] md:shadow-none z-10">
-                    <div className="flex-1 px-6 md:px-10 py-8 md:py-10 overflow-y-auto pb-32 md:pb-10 custom-scrollbar">
+                <div className="flex-1 flex flex-col bg-background-cream md:bg-white relative rounded-t-[2.5rem] md:rounded-none -mt-10 md:mt-0 shadow-[0_-15px_40px_rgba(0,0,0,0.08)] md:shadow-none z-10 transition-all duration-500">
+                    <div className="flex-1 px-6 md:px-10 py-10 md:py-12 overflow-y-auto pb-40 md:pb-12 custom-scrollbar">
 
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-2">
@@ -124,15 +124,15 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
                     </div>
 
                     {/* Bottom Action Bar */}
-                    <div className="md:relative fixed bottom-0 w-full p-6 bg-white/90 md:bg-white backdrop-blur border-t md:border-none border-dark-green/5 z-[60] md:z-auto">
-                        <div className="flex items-center gap-4 md:gap-6">
-                            <div className="flex items-center bg-gray-100 p-1.5 rounded-xl">
-                                <button onClick={() => setQty(Math.max(1, qty - 1))} className="w-12 h-12 flex items-center justify-center rounded-lg bg-white text-dark-green shadow-sm hover:shadow-md transition-all"><Minus size={20} /></button>
-                                <span className="w-12 text-center font-bold text-dark-green text-xl">{qty}</span>
-                                <button onClick={() => setQty(qty + 1)} className="w-12 h-12 flex items-center justify-center rounded-lg bg-primary text-white shadow-sm hover:brightness-110 transition-all"><Plus size={20} /></button>
+                    <div className="md:relative fixed bottom-0 w-full p-6 bg-white/95 md:bg-white ios-blur border-t border-dark-green/5 z-[60] md:z-auto rounded-t-[2rem] md:rounded-none shadow-[0_-10px_30px_rgba(0,0,0,0.05)] md:shadow-none">
+                        <div className="flex items-center gap-4 md:gap-8 max-w-4xl mx-auto">
+                            <div className="flex items-center bg-gray-100/80 p-1.5 rounded-2xl border border-accent-sage/10">
+                                <button onClick={() => setQty(Math.max(1, qty - 1))} className="w-11 h-11 flex items-center justify-center rounded-xl bg-white text-dark-green shadow-sm hover:shadow-md active:scale-90 transition-all"><Minus size={18} /></button>
+                                <span className="w-10 text-center font-extrabold text-dark-green text-xl">{qty}</span>
+                                <button onClick={() => setQty(qty + 1)} className="w-11 h-11 flex items-center justify-center rounded-xl bg-primary text-white shadow-lg shadow-primary/20 hover:brightness-110 active:scale-90 transition-all"><Plus size={18} /></button>
                             </div>
-                            <button onClick={() => onAddToCart(product, qty, notes)} className="flex-1 h-14 md:h-16 bg-dark-green hover:bg-dark-green/90 text-white font-bold text-lg rounded-xl shadow-lg shadow-dark-green/20 flex items-center justify-center gap-3 active:scale-[0.98] transition-all">
-                                <ShoppingBag size={22} />
+                            <button onClick={() => onAddToCart(product, qty, notes)} className="flex-1 h-14 md:h-16 bg-dark-green hover:bg-dark-green/90 text-white font-bold text-lg rounded-2xl shadow-xl shadow-dark-green/20 flex items-center justify-center gap-3 active:scale-[0.97] transition-all group">
+                                <ShoppingBag size={22} className="group-hover:scale-110 transition-transform" />
                                 <span>Adicionar à Cesta</span>
                             </button>
                         </div>
