@@ -13,8 +13,8 @@ export const TopNav = ({ active, onChange, cartCount, isLoggedIn, onLoginClick }
 }) => (
   <nav className="hidden md:flex fixed top-0 w-full bg-white/80 backdrop-blur-md border-b border-accent-sage/20 z-50 px-8 py-4 justify-between items-center transition-all duration-300">
     <div className="flex items-center gap-3 cursor-pointer group" onClick={() => onChange('home')}>
-      <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-        <span className="text-2xl">☕</span>
+      <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center group-hover:bg-primary/5 transition-colors overflow-hidden">
+        <img src="https://i.imgur.com/7IWm3ih.png" alt="Logo Chá das Cinco" className="w-8 h-8 object-contain" />
       </div>
       <div>
         <h1 className="text-xl font-bold text-dark-green tracking-tight leading-none">Chá das Cinco</h1>

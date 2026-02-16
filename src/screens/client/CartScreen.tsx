@@ -160,7 +160,7 @@ export const CartScreen = ({
                                 <div className="space-y-4 mb-8">
                                     <h3 className="text-lg font-bold text-dark-green mb-6 border-b border-gray-100 pb-2">Resumo do Pedido</h3>
                                     <div className="flex justify-between text-dark-green/70 text-sm"><span>Subtotal</span><span className="font-medium text-dark-green">R$ {total.toFixed(2)}</span></div>
-                                    <div className="flex justify-between text-dark-green/70 text-sm"><span>Taxa de Entrega</span><span className="text-primary font-bold">Grátis</span></div>
+                                    <div className="flex justify-between text-dark-green/70 text-sm"><span>Taxa de Entrega</span><span className="text-primary font-bold">Consultar via WhatsApp</span></div>
                                     <div className="h-px bg-gray-200 my-4"></div>
                                     <div className="flex justify-between items-end"><span className="text-lg font-bold text-dark-green">Total</span><span className="text-3xl font-extrabold text-primary">R$ {total.toFixed(2)}</span></div>
                                 </div>

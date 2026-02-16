@@ -7,8 +7,8 @@ export const Footer = () => {
             <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
                 {/* Brand */}
                 <div className="flex flex-col items-center md:items-start">
-                    <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mb-4">
-                        <span className="text-3xl">☕</span>
+                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 overflow-hidden">
+                        <img src="https://i.imgur.com/7IWm3ih.png" alt="Logo Chá das Cinco" className="w-12 h-12 object-contain" />
                     </div>
                     <h2 className="text-2xl font-bold tracking-tight">Chá das Cinco</h2>
                     <p className="text-accent-sage text-sm mt-2 max-w-xs">

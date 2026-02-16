@@ -32,8 +32,8 @@ export const LoginScreen = ({ onLogin, onRegister }: { onLogin: () => void, onRe
 
             <div className="w-full max-w-md z-10">
                 <div className="mb-10 flex flex-col items-center text-center">
-                    <div className="w-24 h-24 bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center mb-6 border border-white/60 shadow-xl">
-                        <span className="text-5xl">☕</span>
+                    <div className="w-24 h-24 bg-white/40 backdrop-blur-md rounded-full flex items-center justify-center mb-6 border border-white/60 shadow-xl overflow-hidden">
+                        <img src="https://i.imgur.com/7IWm3ih.png" alt="Logo Chá das Cinco" className="w-16 h-16 object-contain" />
                     </div>
                     <h1 className="text-4xl font-bold text-dark-green tracking-tight mb-2">Chá das Cinco</h1>
                     <p className="text-accent-sage font-medium uppercase tracking-widest text-xs bg-white/50 px-4 py-1 rounded-full mb-6">Artesanal & Delicado</p>
