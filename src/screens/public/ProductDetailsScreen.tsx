@@ -130,9 +130,6 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-2">
                                 <span className="text-xs font-bold uppercase tracking-wider text-primary/80 bg-primary/10 px-2 py-1 rounded-md">{product.category}</span>
-                                <span className="flex items-center gap-1 text-xs font-medium text-dark-green/60">
-                                    <span className="text-yellow-500">★</span> {product.rating} ({product.reviews} avaliações)
-                                </span>
                             </div>
 
                             {/* Desktop Actions */}
