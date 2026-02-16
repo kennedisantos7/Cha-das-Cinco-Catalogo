@@ -102,5 +102,6 @@ export const SearchScreen = ({
                     </div>
                 </main>
             </div>
-            );
+        </div>
+    );
 };
