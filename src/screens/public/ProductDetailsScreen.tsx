@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { ChevronLeft, Heart, Share2, Minus, Plus, ShoppingBag } from 'lucide-react';
 import { Product } from '../../types/types';
 
-export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteToggle, favorites, onSeeCatalog }: {
+export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteToggle, favorites, onSeeCatalog, onHome }: {
     product: Product,
     onBack: () => void,
     onAddToCart: (p: Product, qty: number) => void,
     onFavoriteToggle: (id: string) => void,
     favorites: string[],
-    onSeeCatalog?: () => void
+    onSeeCatalog?: () => void,
+    onHome?: () => void
 }) => {
     const [qty, setQty] = useState(1);
     const [selectedImageIdx, setSelectedImageIdx] = useState(0);
@@ -66,9 +67,14 @@ export const ProductDetailsScreen = ({ product, onBack, onAddToCart, onFavoriteT
             {/* Mobile Layout Wrapper / Desktop Modal-like Card */}
             <div className="flex flex-col h-full md:h-auto md:max-h-[85vh] md:w-full md:max-w-6xl md:bg-white md:rounded-3xl md:shadow-2xl md:overflow-hidden md:flex-row relative">
 
-                <div className="md:hidden absolute top-8 left-6 right-6 flex justify-between z-20">
+                <div className="md:hidden absolute top-8 left-6 right-6 flex justify-between items-center z-20">
                     <button onClick={onBack} className="w-10 h-10 flex items-center justify-center bg-white/95 ios-blur rounded-full shadow-lg text-dark-green active:scale-90 transition-all">
                         <ChevronLeft size={24} />
+                    </button>
+                    {/* Logo clicável — volta para home */}
+                    <button onClick={onHome} className="flex items-center gap-2 bg-white/90 ios-blur px-3 py-1.5 rounded-full shadow-md active:scale-95 transition-all">
+                        <img src="https://i.imgur.com/7IWm3ih.png" alt="Logo" className="w-6 h-6 object-contain" />
+                        <span className="text-sm font-bold text-dark-green leading-none">Chá das Cinco</span>
                     </button>
                     <div className="flex gap-3">
                         <button onClick={() => onFavoriteToggle(product.id)} className={`w-10 h-10 flex items-center justify-center bg-white/95 ios-blur rounded-full shadow-lg active:scale-90 transition-all ${isFav ? 'text-bordeaux' : 'text-accent-pink'}`}>
