@@ -22,7 +22,7 @@ export const SearchScreen = ({
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCategory, setSelectedCategory] = useState<ProductCategory | 'Todos'>(initialCategory);
 
-    const categories: (ProductCategory | 'Todos')[] = ['Todos', 'SEM GLÚTEN', 'SEM GLÚTEN INTEGRAL', 'SEM GLÚTEN FOLHEADOS', 'TRADICIONAIS', 'LANCHINHOS', 'SONHOS', 'ESFIHA', 'PAMONHAS', 'KIT'];
+    const categories: (ProductCategory | 'Todos')[] = ['Todos', 'SEM GLÚTEN', 'SEM GLÚTEN INTEGRAL', 'SEM GLÚTEN FOLHEADOS', 'TRADICIONAIS', 'LANCHINHOS', 'SONHOS', 'ESFIHA', 'PAMONHAS', 'KIT', 'PÃO DE QUEIJO'];
 
     const filteredProducts = products.filter(p => {
         const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
