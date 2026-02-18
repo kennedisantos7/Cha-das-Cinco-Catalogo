@@ -74,10 +74,6 @@ export const CartScreen = ({
             message += `\n\n*Observações Gerais:*\n${orderNotes}`;
         }
 
-        if (isGuest) {
-            message += `\n\n_📌 Pedido de Visitante (Sem login)_`;
-        }
-
         message += `\n\n_Pedido gerado pelo Catálogo Chá das Cinco_`;
 
         const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
