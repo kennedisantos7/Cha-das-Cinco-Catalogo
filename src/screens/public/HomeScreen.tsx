@@ -2,6 +2,28 @@ import React, { useMemo, useState } from 'react';
 import { Heart, Plus } from 'lucide-react';
 import { Product, ProductCategory } from '../../types/types';
 
+const CATEGORY_CONFIG: Record<string, { emoji: string; color: string; bg: string }> = {
+    'SEM GLÚTEN': { emoji: '🌾', color: '#5a8a5a', bg: '#e8f5e8' },
+    'SEM GLÚTEN INTEGRAL': { emoji: '🍞', color: '#8a6a2a', bg: '#fdf3e0' },
+    'SEM GLÚTEN FOLHEADOS': { emoji: '🥐', color: '#c07830', bg: '#fff3e0' },
+    'TRADICIONAIS': { emoji: '🥖', color: '#a05030', bg: '#fdeee8' },
+    'LANCHINHOS': { emoji: '🥯', color: '#2a7a8a', bg: '#e0f4f8' },
+    'SONHOS': { emoji: '🍩', color: '#8a3a6a', bg: '#fce8f4' },
+    'ESFIHA': { emoji: '🥟', color: '#6a5a8a', bg: '#ede8f8' },
+    'PAMONHAS': { emoji: '🌽', color: '#7a8a2a', bg: '#f4f8e0' },
+    'KIT': { emoji: '🎁', color: '#c03060', bg: '#fce8ee' },
+    'PÃO DE QUEIJO': { emoji: '🧀', color: '#9a7a20', bg: '#fdf8e0' },
+};
+
+function shuffleArray<T>(arr: T[]): T[] {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
 export const HomeScreen = ({ products, featuredProduct, onItemClick, onSeeAll, onFavoriteToggle, favorites, onAddToCart, onCategoryClick }: {
     products: Product[],
     featuredProduct: Product,
@@ -20,7 +42,9 @@ export const HomeScreen = ({ products, featuredProduct, onItemClick, onSeeAll, o
         return products.filter(p => p.category === localCategory);
     }, [products, localCategory]);
 
-    const categories: ProductCategory[] = ['SEM GLÚTEN', 'SEM GLÚTEN INTEGRAL', 'SEM GLÚTEN FOLHEADOS', 'TRADICIONAIS', 'LANCHINHOS', 'SONHOS', 'ESFIHA', 'PAMONHAS', 'KIT', 'PÃO DE QUEIJO'];
+    // Randomize category order once on mount
+    const allCategories: ProductCategory[] = ['SEM GLÚTEN', 'SEM GLÚTEN INTEGRAL', 'SEM GLÚTEN FOLHEADOS', 'TRADICIONAIS', 'LANCHINHOS', 'SONHOS', 'ESFIHA', 'PAMONHAS', 'KIT', 'PÃO DE QUEIJO'];
+    const categories = useMemo(() => shuffleArray(allCategories), []);
 
     return (
         <div className="flex-1 w-full max-w-7xl mx-auto md:px-6 pt-2 md:pt-6 pb-32">
@@ -43,33 +67,71 @@ export const HomeScreen = ({ products, featuredProduct, onItemClick, onSeeAll, o
             </div>
 
             <div className="mb-10">
-                <div className="flex items-center justify-between mb-6 px-4 md:px-0">
+                <div className="flex items-center justify-between mb-4 px-4 md:px-0">
                     <h3 className="font-bold text-xl md:text-2xl text-dark-green">Categorias</h3>
                     <button className="text-primary text-sm font-bold hover:underline" onClick={() => { setLocalCategory('Todos'); onSeeAll(); }}>Ver Todas</button>
                 </div>
-                <div className="flex justify-between md:justify-start gap-2 md:gap-8 overflow-x-auto hide-scrollbar pb-4 px-4 md:px-0">
-                    {categories.map((cat, i) => {
+
+                {/* Mobile: 2-row scrollable grid */}
+                <div className="md:hidden overflow-x-auto hide-scrollbar pb-3 px-4">
+                    <div className="flex flex-col gap-2" style={{ width: 'max-content' }}>
+                        {[categories.slice(0, Math.ceil(categories.length / 2)), categories.slice(Math.ceil(categories.length / 2))].map((row, rowIdx) => (
+                            <div key={rowIdx} className="flex gap-2">
+                                {row.map((cat) => {
+                                    const isActive = localCategory === cat;
+                                    const cfg = CATEGORY_CONFIG[cat] ?? { emoji: '🎁', color: '#888', bg: '#f0f0f0' };
+                                    return (
+                                        <button
+                                            key={cat}
+                                            onClick={() => setLocalCategory(isActive ? 'Todos' : cat)}
+                                            className="flex items-center gap-2 px-3 py-2 rounded-2xl transition-all duration-300 active:scale-95 whitespace-nowrap"
+                                            style={{
+                                                background: isActive ? cfg.color : cfg.bg,
+                                                boxShadow: isActive ? `0 4px 14px ${cfg.color}55` : '0 1px 4px rgba(0,0,0,0.06)',
+                                                border: `1.5px solid ${isActive ? cfg.color : 'transparent'}`,
+                                            }}
+                                        >
+                                            <span className="text-xl leading-none">{cfg.emoji}</span>
+                                            <span
+                                                className="text-[11px] font-bold uppercase tracking-wide leading-tight"
+                                                style={{ color: isActive ? '#fff' : cfg.color }}
+                                            >
+                                                {cat}
+                                            </span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Desktop: single-row scroll */}
+                <div className="hidden md:flex gap-6 overflow-x-auto hide-scrollbar pb-4">
+                    {categories.map((cat) => {
                         const isActive = localCategory === cat;
+                        const cfg = CATEGORY_CONFIG[cat] ?? { emoji: '🎁', color: '#888', bg: '#f0f0f0' };
                         return (
                             <button
                                 key={cat}
                                 onClick={() => setLocalCategory(isActive ? 'Todos' : cat)}
-                                className="flex flex-col items-center gap-3 min-w-[85px] md:min-w-[100px] group transition-all"
+                                className="flex flex-col items-center gap-3 min-w-[100px] group transition-all"
                             >
-                                <div className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center transition-all duration-300 ${isActive ? 'bg-primary text-white shadow-lg scale-105' : 'bg-white border border-accent-sage/20 text-accent-sage group-hover:border-primary/50 group-hover:text-primary group-hover:shadow-md'}`}>
-                                    <span className="text-2xl md:text-3xl">
-                                        {cat === 'SEM GLÚTEN' ? '🌾' :
-                                            cat === 'SEM GLÚTEN INTEGRAL' ? '🍞' :
-                                                cat === 'SEM GLÚTEN FOLHEADOS' ? '🥐' :
-                                                    cat === 'TRADICIONAIS' ? '🥖' :
-                                                        cat === 'LANCHINHOS' ? '🥯' :
-                                                            cat === 'SONHOS' ? '🍩' :
-                                                                cat === 'ESFIHA' ? '🥟' :
-                                                                    cat === 'PAMONHAS' ? '🌽' :
-                                                                        cat === 'PÃO DE QUEIJO' ? '🧀' : '🎁'}
-                                    </span>
+                                <div
+                                    className="w-20 h-20 rounded-2xl flex items-center justify-center transition-all duration-300"
+                                    style={{
+                                        background: isActive ? cfg.color : cfg.bg,
+                                        boxShadow: isActive ? `0 6px 20px ${cfg.color}55` : '0 2px 8px rgba(0,0,0,0.06)',
+                                        transform: isActive ? 'scale(1.08)' : 'scale(1)',
+                                        border: `2px solid ${isActive ? cfg.color : 'transparent'}`,
+                                    }}
+                                >
+                                    <span className="text-3xl">{cfg.emoji}</span>
                                 </div>
-                                <span className={`text-[10px] md:text-xs font-bold text-center leading-tight uppercase tracking-wider block w-full px-1 ${isActive ? 'text-dark-green' : 'text-accent-sage group-hover:text-dark-green'}`}>
+                                <span
+                                    className="text-xs font-bold text-center leading-tight uppercase tracking-wider block w-full px-1 transition-colors"
+                                    style={{ color: isActive ? cfg.color : '#7a9a7a' }}
+                                >
                                     {cat}
                                 </span>
                             </button>

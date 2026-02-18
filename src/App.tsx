@@ -47,11 +47,16 @@ const AppContent = () => {
                 const { data: prodData } = await supabase.from('products').select('*');
                 if (prodData && prodData.length > 0) {
                     const mappedData = prodData.map((item: any) => {
-                        const images = item.images && item.images.length > 0 ? item.images : [item.image_url || item.image];
+                        // `images` is always a proper array from the DB
+                        // `image_url` is a PostgreSQL set-format string (not a plain URL), so we ignore it
+                        const images: string[] = Array.isArray(item.images) && item.images.length > 0
+                            ? item.images
+                            : [];
+                        const image = images[0] || '';
                         return {
                             ...item,
                             images,
-                            image: images[0]
+                            image,
                         };
                     });
                     setProducts(mappedData);
