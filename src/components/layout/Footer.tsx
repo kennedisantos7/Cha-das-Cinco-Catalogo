@@ -12,7 +12,8 @@ export const Footer = () => {
                     </div>
                     <h2 className="text-2xl font-bold tracking-tight">Chá das Cinco</h2>
                     <p className="text-accent-sage text-sm mt-2 max-w-xs">
-                        Artesanal, delicado e feito com amor. A melhor experiência em confeitaria e chás.
+                        Artesanal feito com amor.<br />
+                        A melhor experiência em panificação congelada.
                     </p>
                 </div>
 
