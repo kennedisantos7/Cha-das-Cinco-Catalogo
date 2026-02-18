@@ -13,14 +13,7 @@ const CATEGORY_CONFIG: Record<string, { emoji: string; color: string; bg: string
     'KIT': { emoji: '🎁', color: '#c03060', bg: '#fce8ee' },
 };
 
-function shuffleArray<T>(arr: T[]): T[] {
-    const a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-}
+
 
 export const HomeScreen = ({ products, featuredProduct, onItemClick, onSeeAll, onFavoriteToggle, favorites, onAddToCart, onCategoryClick }: {
     products: Product[],
@@ -41,8 +34,7 @@ export const HomeScreen = ({ products, featuredProduct, onItemClick, onSeeAll, o
     }, [products, localCategory]);
 
     // Randomize category order once on mount
-    const allCategories: ProductCategory[] = ['SEM GLÚTEN', 'TRADICIONAIS', 'PÃO DE QUEIJO', 'LANCHINHOS', 'SONHOS', 'PAMONHAS', 'ESFIHAS', 'KIT'];
-    const categories = useMemo(() => shuffleArray(allCategories), []);
+    const categories: ProductCategory[] = ['SEM GLÚTEN', 'TRADICIONAIS', 'PÃO DE QUEIJO', 'LANCHINHOS', 'SONHOS', 'PAMONHAS', 'ESFIHAS', 'KIT'];
 
     return (
         <div className="flex-1 w-full max-w-7xl mx-auto md:px-6 pt-2 md:pt-6 pb-32">
