@@ -4,15 +4,13 @@ import { Product, ProductCategory } from '../../types/types';
 
 const CATEGORY_CONFIG: Record<string, { emoji: string; color: string; bg: string }> = {
     'SEM GLÚTEN': { emoji: '🌾', color: '#5a8a5a', bg: '#e8f5e8' },
-    'SEM GLÚTEN INTEGRAL': { emoji: '🍞', color: '#8a6a2a', bg: '#fdf3e0' },
-    'SEM GLÚTEN FOLHEADOS': { emoji: '🥐', color: '#c07830', bg: '#fff3e0' },
     'TRADICIONAIS': { emoji: '🥖', color: '#a05030', bg: '#fdeee8' },
+    'PÃO DE QUEIJO': { emoji: '🧀', color: '#9a7a20', bg: '#fdf8e0' },
     'LANCHINHOS': { emoji: '🥯', color: '#2a7a8a', bg: '#e0f4f8' },
     'SONHOS': { emoji: '🍩', color: '#8a3a6a', bg: '#fce8f4' },
-    'ESFIHA': { emoji: '🥟', color: '#6a5a8a', bg: '#ede8f8' },
     'PAMONHAS': { emoji: '🌽', color: '#7a8a2a', bg: '#f4f8e0' },
+    'ESFIHAS': { emoji: '🥟', color: '#6a5a8a', bg: '#ede8f8' },
     'KIT': { emoji: '🎁', color: '#c03060', bg: '#fce8ee' },
-    'PÃO DE QUEIJO': { emoji: '🧀', color: '#9a7a20', bg: '#fdf8e0' },
 };
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -43,7 +41,7 @@ export const HomeScreen = ({ products, featuredProduct, onItemClick, onSeeAll, o
     }, [products, localCategory]);
 
     // Randomize category order once on mount
-    const allCategories: ProductCategory[] = ['SEM GLÚTEN', 'SEM GLÚTEN INTEGRAL', 'SEM GLÚTEN FOLHEADOS', 'TRADICIONAIS', 'LANCHINHOS', 'SONHOS', 'ESFIHA', 'PAMONHAS', 'KIT', 'PÃO DE QUEIJO'];
+    const allCategories: ProductCategory[] = ['SEM GLÚTEN', 'TRADICIONAIS', 'PÃO DE QUEIJO', 'LANCHINHOS', 'SONHOS', 'PAMONHAS', 'ESFIHAS', 'KIT'];
     const categories = useMemo(() => shuffleArray(allCategories), []);
 
     return (
