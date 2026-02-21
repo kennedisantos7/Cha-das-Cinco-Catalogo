@@ -122,11 +122,18 @@ const AppContent = () => {
         setCart(prev => {
             const existing = prev.find(p => p.id === product.id);
             if (existing) {
-                return prev.map(p => p.id === product.id ? { ...p, quantity: p.quantity + quantity } : p);
+                const newQuantity = existing.quantity + quantity;
+                if (newQuantity <= 0) {
+                    return prev.filter(p => p.id !== product.id);
+                }
+                return prev.map(p => p.id === product.id ? { ...p, quantity: newQuantity } : p);
             }
+            if (quantity <= 0) return prev;
             return [...prev, { ...product, quantity }];
         });
-        setActiveScreen('cart');
+        if (activeScreen !== 'cart') {
+            setActiveScreen('cart');
+        }
     };
 
     const toggleFavorite = async (id: string) => {

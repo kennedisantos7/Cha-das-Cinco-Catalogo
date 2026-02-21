@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingBag, ChevronLeft, Edit3, ArrowRight, Heart, Plus, Search } from 'lucide-react';
+import { ShoppingBag, ChevronLeft, Edit3, ArrowRight, Heart, Plus, Search, Minus } from 'lucide-react';
 import { CartItem, Product } from '../../types/types';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
@@ -119,8 +119,29 @@ export const CartScreen = ({
                                                     <div className="text-xs text-gray-400 font-bold bg-white px-2 py-1 rounded border border-gray-100">
                                                         R$ {item.price.toFixed(2)} un.
                                                     </div>
-                                                    <div className="flex items-center bg-white rounded-lg px-3 py-1 border border-gray-100 shadow-sm">
-                                                        <span className="text-sm font-bold text-dark-green">Quant: {item.quantity}</span>
+                                                    <div className="flex items-center gap-1 bg-white rounded-xl p-0.5 border border-primary/10 shadow-sm">
+                                                        <button
+                                                            onClick={(e) => { e.stopPropagation(); onAddToCart(item as any as Product, -1); }}
+                                                            className="w-8 h-8 flex items-center justify-center text-primary hover:bg-primary/5 rounded-lg transition-colors"
+                                                            title="Diminuir"
+                                                        >
+                                                            <Minus size={14} strokeWidth={3} />
+                                                        </button>
+                                                        <div
+                                                            onClick={() => onAddToCart(item as any as Product, 1)}
+                                                            className="px-1 min-w-[3rem] text-center cursor-pointer hover:bg-primary/5 rounded-lg transition-colors flex flex-col items-center justify-center"
+                                                            title="Clique para aumentar"
+                                                        >
+                                                            <span className="text-[10px] uppercase text-accent-sage font-bold leading-none">Qtd</span>
+                                                            <span className="text-sm font-bold text-dark-green leading-none">{item.quantity}</span>
+                                                        </div>
+                                                        <button
+                                                            onClick={(e) => { e.stopPropagation(); onAddToCart(item as any as Product, 1); }}
+                                                            className="w-8 h-8 flex items-center justify-center bg-primary text-white hover:bg-primary-dark rounded-lg transition-colors shadow-sm"
+                                                            title="Aumentar"
+                                                        >
+                                                            <Plus size={14} strokeWidth={3} />
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
