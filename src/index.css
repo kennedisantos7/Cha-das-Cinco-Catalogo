@@ -1,1 +1,93 @@
-/* Empty file to satisfy import in main.tsx */
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #4ca99d;
+  --color-primary-dark: #3d8a80;
+  --color-accent-pink: #fce7e9;
+  --color-accent-sage: #8da399;
+  --color-background-cream: #F4E2BB;
+  --color-background-light: #fdfbf7;
+  --color-background-dark: #151d1c;
+  --color-dark-green: #1e3932;
+  --color-soft-pink: #FADADD;
+  --color-bordeaux: #A54F5E;
+
+  --font-display: "Plus Jakarta Sans", sans-serif;
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+
+  --animate-slide-up: slideUp 0.3s ease-out forwards;
+  --animate-fade-in: fadeIn 0.3s ease-out forwards;
+  --animate-scale-up: scaleUp 0.3s ease-out forwards;
+
+  @keyframes slideUp {
+    0% {
+      transform: translateY(100%);
+    }
+
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes scaleUp {
+    0% {
+      transform: scale(0.95);
+      opacity: 0;
+    }
+
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+}
+
+@layer base {
+  body {
+    @apply font-sans antialiased bg-gray-100 text-dark-green;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@layer components {
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .ios-blur {
+    @apply backdrop-blur-[20px];
+    -webkit-backdrop-filter: blur(20px);
+  }
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-primary/20 rounded-full;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-primary/40;
+}

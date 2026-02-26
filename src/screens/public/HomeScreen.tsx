@@ -52,7 +52,10 @@ export const HomeScreen = ({ products, featuredProduct, onItemClick, onSeeAll, o
                     src={featuredProduct.image}
                     onLoad={() => setImageLoaded(true)}
                     className={`absolute inset-0 h-full w-full object-cover transition-all duration-1000 group-hover:scale-110 ${imageLoaded ? 'opacity-70 md:opacity-90 blur-0' : 'opacity-0 blur-lg'}`}
-                    alt="Hero"
+                    alt={featuredProduct.name}
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="sync"
                 />
             </div>
 
@@ -140,7 +143,13 @@ export const HomeScreen = ({ products, featuredProduct, onItemClick, onSeeAll, o
                         return (
                             <div key={product.id} className="bg-white border border-accent-sage/10 rounded-2xl p-3 md:p-4 shadow-sm flex flex-col group hover:shadow-xl hover:border-primary/20 transition-all duration-300 cursor-pointer">
                                 <div className="relative w-full aspect-square rounded-xl overflow-hidden mb-4" onClick={() => onItemClick(product)}>
-                                    <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                                    <img
+                                        src={product.image}
+                                        alt={product.name}
+                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
                                     <button
                                         onClick={(e) => { e.stopPropagation(); onFavoriteToggle(product.id); }}
                                         className={`absolute top-2 right-2 w-11 h-11 backdrop-blur-md rounded-full flex items-center justify-center shadow-lg transition-all active:scale-90 ${isFav ? 'bg-accent-pink text-bordeaux' : 'bg-white/80 text-primary'}`}

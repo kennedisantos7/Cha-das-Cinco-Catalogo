@@ -103,15 +103,6 @@ const AppContent = () => {
                     }
                     setFeaturedProduct(featured);
 
-                    // Preload major image
-                    if (featured.image) {
-                        const img = new Image();
-                        img.src = featured.image;
-                        await new Promise((resolve) => {
-                            img.onload = () => setTimeout(resolve, 100);
-                            img.onerror = resolve; // Continue even on error to not block app
-                        });
-                    }
                 }
 
                 // Fetch Favorites if logged in
