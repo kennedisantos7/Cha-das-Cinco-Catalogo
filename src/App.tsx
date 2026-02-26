@@ -11,6 +11,7 @@ import { supabase } from './lib/supabase';
 import { TopNav } from './components/layout/TopNav';
 import { BottomNav } from './components/layout/BottomNav';
 import { Footer } from './components/layout/Footer';
+import { ShoppingBag } from 'lucide-react';
 
 // Screens
 import { LoginScreen } from './screens/auth/LoginScreen';
@@ -28,13 +29,30 @@ const AppContent = () => {
     const [activeScreen, setActiveScreen] = useState<ScreenName>('home');
     const [searchCategory, setSearchCategory] = useState<ProductCategory | 'Todos'>('Todos');
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-    const [cart, setCart] = useState<CartItem[]>([]);
-    const [favorites, setFavorites] = useState<string[]>([]);
+    const [cart, setCart] = useState<CartItem[]>(() => {
+        const savedCart = localStorage.getItem('cha-das-cinco-cart');
+        try {
+            return savedCart ? JSON.parse(savedCart) : [];
+        } catch (e) {
+            console.error("Erro ao carregar carrinho do localStorage", e);
+            return [];
+        }
+    });
+    const [favorites, setFavorites] = useState<string[]>(() => {
+        const savedFavs = localStorage.getItem('cha-das-cinco-favorites');
+        try {
+            return savedFavs ? JSON.parse(savedFavs) : [];
+        } catch (e) {
+            console.error("Erro ao carregar favoritos do localStorage", e);
+            return [];
+        }
+    });
     const [products, setProducts] = useState<Product[]>(initialProducts);
     const [productsLoading, setProductsLoading] = useState(true);
     const [featuredProduct, setFeaturedProduct] = useState<Product>(() => {
         return initialProducts[Math.floor(Math.random() * initialProducts.length)];
     });
+    const [showRecoveryPopup, setShowRecoveryPopup] = useState(false);
 
     // Auth from Context
     const { session, loading: authLoading, signOut } = useAuth();
@@ -104,10 +122,11 @@ const AppContent = () => {
                         .eq('user_id', session.user.id);
 
                     if (favData) {
-                        setFavorites(favData.map(f => f.product_id));
+                        const cloudFavs = favData.map(f => f.product_id);
+                        setFavorites(cloudFavs);
+                        // Update local cache with cloud data when logged in
+                        localStorage.setItem('cha-das-cinco-favorites', JSON.stringify(cloudFavs));
                     }
-                } else {
-                    setFavorites([]);
                 }
             } catch (err) {
                 console.error("Error fetching data:", err);
@@ -117,6 +136,33 @@ const AppContent = () => {
         };
         fetchData();
     }, [session?.user?.id]);
+
+    // Persist cart changes
+    useEffect(() => {
+        localStorage.setItem('cha-das-cinco-cart', JSON.stringify(cart));
+    }, [cart]);
+
+    // Persist local favorites only when guest
+    useEffect(() => {
+        if (!session) {
+            localStorage.setItem('cha-das-cinco-favorites', JSON.stringify(favorites));
+        }
+    }, [favorites, session]);
+
+    // Check for recovering cart on mount
+    useEffect(() => {
+        const hasRecoveredCart = cart.length > 0;
+        const alreadyShown = sessionStorage.getItem('recovery_popup_shown');
+
+        if (hasRecoveredCart && !alreadyShown) {
+            // Wait a bit for the app to settle
+            const timer = setTimeout(() => {
+                setShowRecoveryPopup(true);
+                sessionStorage.setItem('recovery_popup_shown', 'true');
+            }, 1500);
+            return () => clearTimeout(timer);
+        }
+    }, []); // Run only once on mount
 
     const addToCart = (product: Product, quantity: number) => {
         setCart(prev => {
@@ -137,13 +183,13 @@ const AppContent = () => {
     };
 
     const toggleFavorite = async (id: string) => {
+        const isFavorited = favorites.includes(id);
+
+        // guest mode - local only
         if (!isLoggedIn || !session?.user?.id) {
-            alert("Por favor, faça login para favoritar itens.");
-            setActiveScreen('login');
+            setFavorites(prev => isFavorited ? prev.filter(fid => id !== fid) : [...prev, id]);
             return;
         }
-
-        const isFavorited = favorites.includes(id);
 
         // Optimistic update
         setFavorites(prev => isFavorited ? prev.filter(fid => id !== fid) : [...prev, id]);
@@ -240,6 +286,38 @@ const AppContent = () => {
                     onChange={setActiveScreen}
                     cartCount={cartCount}
                 />
+            )}
+
+            {/* Cart Recovery Popup */}
+            {showRecoveryPopup && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+                    <div className="bg-white rounded-[32px] p-8 max-w-sm w-full shadow-2xl animate-scale-up border border-primary/10">
+                        <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <ShoppingBag className="text-primary w-10 h-10" />
+                        </div>
+                        <h2 className="text-2xl font-bold text-dark-green text-center mb-3 tracking-tight">Pedido em aberto!</h2>
+                        <p className="text-accent-sage text-center mb-8 font-medium leading-relaxed">
+                            Você deixou alguns itens deliciosos na sua cesta. Gostaria de finalizar seu pedido agora?
+                        </p>
+                        <div className="flex flex-col gap-3">
+                            <button
+                                onClick={() => {
+                                    setActiveScreen('cart');
+                                    setShowRecoveryPopup(false);
+                                }}
+                                className="w-full bg-primary text-white py-4 rounded-2xl font-bold text-lg shadow-lg shadow-primary/30 hover:bg-primary-dark transition-all active:scale-[0.98]"
+                            >
+                                Ver Minha Cesta
+                            </button>
+                            <button
+                                onClick={() => setShowRecoveryPopup(false)}
+                                className="w-full bg-gray-50 text-accent-sage py-4 rounded-2xl font-bold text-base hover:bg-gray-100 transition-all active:scale-[0.98]"
+                            >
+                                Continuar Comprando
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );
